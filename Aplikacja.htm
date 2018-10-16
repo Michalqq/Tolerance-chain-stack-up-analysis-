@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!--
+Politechnika Warszawska
+wydział Samochodów i Maszyn Roboczych
+
+Strona została zbudowana w ramach pracy magisterskiej pt. 
+"Aplikacja do modelowania analizy i syntezy wymiarowej"
+
+Autor: Michał Kraciuk
+Promotor pracy: Dr inż. Zbigniew Humienny
+
+WARSZAWA, 2018
+Kontakt:  kraciukmichal@gmail.com-->
+<html>
+<head>
+<script src="Chart.js"></script>
+<script src="FileSaver.js"></script>
+<script src="Description.js"></script>
+<script src="Main.js"></script>
+
+<meta charset="UTF-8">
+<meta name="author" content="Michał Kraciuk">
+<link rel="stylesheet" href="Mgr.css" />
+
+<title>Analiza i synteza wymiarowa</title>
+
+<ul1 id="Menu0" style="margin-top: -10px; position: fixed">
+  <li1 id="MenuGłówna" class="active" onclick="ActivateMenu(id)" ><a>Główna</a></li1>
+  <li1 id="MenuŁańcuch" class="" onclick="ActivateMenu(id)" ><a>Łańcuch wymiar.</a></li1>
+  <li1 id="MenuAbout" class="" onclick="ActivateMenu(id)" ><a>Opis</a></li1>
+</ul1>
+
+<img src="image/logowspolne.png" alt="Logo Politechnika Warszawska" style="position: absolute; border-radius: 30px; opacity: 0.85; z-index: 2; margin-left: 585px; margin-top: -3px" width="130" height="65">
+</head>
+<body>
+<p style="position:absolute; left:10px; top: 1px;"> Aby rozpocząć analizę wymiarową wprowadź niezbędne dane:</p>
+<ul style="list-style-type:disc;left:5px; top:18px; position: absolute; font-size: 8px;">
+  <li>Wymiary niezależne</li>
+  <li>Odchyłki es, ei, (z odpowiednim znakiem)</li>
+  <li>Zaznacz znak działań matematycznych</li>
+</ul>
+<!-- zwijać -->
+<div id="chartHistogram" class="chartHistogram" style="visibility: hidden">
+   <p id="ChartHist1Wym" class="chartHistDim" style="left: 40px"> </p>
+    <p id="ChartHist2Wym" class="chartHistDim" style="left: 160px;"> </p>
+     <p id="ChartHist3Wym" class="chartHistDim" style="left: 280px;"> </p>
+      <p id="ChartHist4Wym" class="chartHistDim" style="left: 400px;"> </p>
+       <p id="ChartHist5Wym" class="chartHistDim" style="left:520px;"> </p>
+        <p id="ChartHist6Wym" class="chartHistDim" style="left: 645px;"> </p>
+   
+    <div id="ChartHist1" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:-87px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="CharttHist1" ></canvas>
+     </div>
+     <div id="ChartHist2" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:37px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+   <canvas id="CharttHist2" ></canvas>
+     </div>
+     <div id="ChartHist3" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:161px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="CharttHist3" ></canvas>
+      <canvas id="CharttHist0" ></canvas>
+     </div>
+     <div id="ChartHist4" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:285px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="CharttHist4" ></canvas>
+     </div>
+     <div id="ChartHist5" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:409px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="CharttHist5" ></canvas>
+     </div>
+     <div id="ChartHist6" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:533px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+     <canvas id="CharttHist6" ></canvas>
+    </div>
+</div>
+<div class="ChartSingle"> 
+<div id="Chart1.0" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="Chartt1.0" class="chartCanvas"></canvas>
+</div> 
+<div id="Chart1.1" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+    <canvas id="Chartt1.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart1.2" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt1.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart1.3" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt1.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart1.4" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt1.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart1.5" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt1.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart1.6" class='chart chartTop chartLeft240' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt1.6" class="chartCanvas"></canvas>
+</div>
+   <div id="Chart2.0" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.0" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.1" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.2" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.3" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.4" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.5" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart2.6" class='chart chartTop chartLeft350' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt2.6" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.0" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.0" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.1" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.2" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.3" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.4" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.5" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart3.6" class='chart chartTop chartLeft460' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt3.6" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.0" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.0" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.1" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.2" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.3" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.4" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.5" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart4.6" class='chart chartTop chartLeft180' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt4.6" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.0" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.0" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.1" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.2" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.3" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.4" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.5" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart5.6" class='chart chartTop chartLeft290' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt5.6" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.0" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.0" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.1" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.1" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.2" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.2" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.3" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.3" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.4" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.4" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.5" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.5" class="chartCanvas"></canvas>
+</div>
+<div id="Chart6.6" class='chart chartTop chartLeft400' onmouseover="zoomIn(this)" onmouseout="zoomOut(this)" >
+    <canvas id="Chartt6.6" class="chartCanvas"></canvas>
+</div>
+</div>
+
+<!-- zwijać -->
+<div class="BtnOblicz" style=" border:solid grey;">
+	<p style="margin-left:10px;margin-top:1px;font: 600 13px/1 'Arial', arial;color:blue">Oblicz:</p>
+</div>
+<div class="BtnDane" style=" border:solid grey;">
+	<p style="margin-left:10px;margin-top:1px;font: 600 13px/1 'Arial', arial;color:blue">Dane:</p>
+</div>
+<div class="BtnOdswiez" style=" border:solid grey;">
+</div>
+<div id="container" style="margin-top:235px; position:absolute; visibility:hidden; background-color:#eee; z-index:3" ></div>
+<div id="container2" style="margin-top:220px;width: 750px;height: 300px; position:absolute; visibility:hidden; background-color:azure; z-index:3; border-radius: 20px;box-shadow: inset 0 1px 0 0px rgba(0, 0, 0, 0.2), inset 0 8px 10px rgba(0, 0, 0, 0.2);" >
+	<img src="image/logoSIMR.jpg" alt="Logo Politechnika Warszawska" style="position: absolute;opacity: 0.95; z-index: 3; margin-left: 625px; margin-top: 15px; border-radius: 15px" width="120" height="120">
+    <p id="Description" style="margin-left:25px;margin-top:15px;font: 13px/1 'Arial', arial"><b>Politechnika Warszawska</b>, wydział Samochodów i Maszyn Roboczych<br><br>Strona została zbudowana w ramach pracy magisterskiej pt. <br><i><b>"Aplikacja do modelowania analizy i syntezy wymiarowej"</b></i><br> <br><br> Autor: &nbsp&nbsp<b>Michał Kraciuk</b> <br><br> Promotor pracy: <b>Dr inż. Zbigniew Humienny</b><br><br> WARSZAWA, 2018<br>Wersja 1.0 - 30.08.2018&nbsp&nbsp Kontakt:  <i>  kraciukmichal@gmail.com</i>    
+</div>
+<div class="BtnSchedule" style="background-color:white; width:605px; height:210px; border: solid; border-radius: 10px;" >
+  <div class='BtnLeft1' >
+   
+    <a id="BtnChart1.1" class='left1 btn sec' style="top:5px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart1.2" class='left1 btn sec'style="top:29px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart1.3" class='left1 btn sec'style="top:53px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart1.4" class='left1 btn sec sec1' style="top:77px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart1.5" class='left1 btn sec sec1' style="top:104px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart1.6" class='left1 btn sec'style="top:132px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+   <div class='BtnLeft2'>
+   
+    <a id="BtnChart2.1" class='left2 btn sec' style="top:5px" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart2.2" class='left2 btn sec'style="top:29px" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart2.3" class='left2 btn sec'style="top:53px" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart2.4" class='left2 btn sec sec1'style="top:77px" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart2.5" class='left2 btn sec sec1'style="top:104px" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart2.6" class='left2 btn sec'style="top:132px" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+  <div class='BtnLeft3'>
+   
+    <a id="BtnChart3.1" class='left3 btn sec' style="top:5px" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart3.2" class='left3 btn sec'style="top:29px" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart3.3" class='left3 btn sec'style="top:53px" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart3.4" class='left3 btn sec sec1'style="top:77px" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart3.5" class='left3 btn sec sec1'style="top:104px" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart3.6" class='left3 btn sec'style="top:132px" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+  <div class='BtnLeft4'>
+  
+    <a id="BtnChart4.1" class='left4 btn sec' style="top:5px" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart4.2" class='left4 btn sec'style="top:29px" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart4.3" class='left4 btn sec'style="top:53px" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart4.4" class='left4 btn sec sec1'style="top:77px" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart4.5" class='left4 btn sec sec1'style="top:104px" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart4.6" class='left4 btn sec'style="top:132px" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+   <div class='BtnLeft5'>
+   
+    <a id="BtnChart5.1" class='left5 btn sec' style="top:5px" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart5.2" class='left5 btn sec'style="top:29px" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart5.3" class='left5 btn sec'style="top:53px" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart5.4" class='left5 btn sec sec1'style="top:77px" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart5.5" class='left5 btn sec sec1'style="top:104px" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart5.6" class='left5 btn sec'style="top:132px" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+   <div class='BtnLeft6'>
+  
+    <a id="BtnChart6.1" class='left6 btn sec' style="top:5px" onclick="AcceptBtnChart(id)">r. normalny</a>
+    <a id="BtnChart6.2" class='left6 btn sec'style="top:29px" onclick="AcceptBtnChart(id)">r. równomierny</a>
+    <a id="BtnChart6.3" class='left6 btn sec'style="top:53px" onclick="AcceptBtnChart(id)">r. trójkątny</a>
+    <a id="BtnChart6.4" class='left6 btn sec sec1'style="top:77px" onclick="AcceptBtnChart(id)">r. Rayleigha - <p4>skośność lewostronna</p4></a>
+	<a id="BtnChart6.5" class='left6 btn sec sec1'style="top:104px" onclick="AcceptBtnChart(id)">r. Rayleigha + <p4>skośność prawostronna</p4></a>
+	<a id="BtnChart6.6" class='left6 btn sec'style="top:132px" onclick="AcceptBtnChart(id)">r. norm. niesym</a>
+  </div>
+  <div class="Asymetric">
+	<div id="Asymetric1" class="left1 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue1" style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range1" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+	<div id="Asymetric2" class="left2 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue2"style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range2" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+	<div id="Asymetric3" class="left3 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue3"style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range3" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+	<div id="Asymetric4" class="left4 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue4"style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range4" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+	<div id="Asymetric5" class="left5 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue5"style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range5" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+	<div id="Asymetric6" class="left6 btn sec asymetric" style="opacity:0.3">
+		<p id="RangeValue6"style="text-align: center">Asymetria: 50%</p>
+		<input type="range" min="10" max="90" value="50" step="10" id="Range6" onclick="Slider(id)" style="width: 80px; margin-left: 1px;" disabled>
+	</div>
+</div>
+</div>
+<!-- zwijać -->
+<div class="BtnSign">
+<!--<button id="AllPlus" class="buttonAllCheck btn sec" onclick="CheckAllBtn(0)" style="top: 35px; left: 530px"><b>Tylko dodawanie</b></button>
+<button id="AllMinus" class="buttonAllCheck btn sec" onclick="CheckAllBtn(1)" style="top: 35px; left: 660px"><b>Tylko odejmowanie</b></button>-->
+<button id="btn+A" class="button button0" onclick="PlusMinusClick('+A')" style="left: 108px"><b>+</b></button>
+<button id="btn-A" class="button button1" onclick="PlusMinusClick('-A')" style="padding: 0px 6px; left: 108px"><b>-</b></button>
+<button id="btn+B" class="button button0" onclick="PlusMinusClick('+B')" style="left: 213px"><b>+</b></button>
+<button id="btn-B" class="button button1" onclick="PlusMinusClick('-B')" style="padding: 0px 6px; left: 213px"><b>-</b></button>
+<button id="btn+C" class="button button0" onclick="PlusMinusClick('+C')" style="left: 316px"><b>+</b></button>
+<button id="btn-C" class="button button1" onclick="PlusMinusClick('-C')" style="padding: 0px 6px; left: 316px"><b>-</b></button>
+<button id="btn+D" class="button button0" onclick="PlusMinusClick('+D')" style="left: 419px"><b>+</b></button>
+<button id="btn-D" class="button button1" onclick="PlusMinusClick('-D')" style="padding: 0px 6px; left: 419px"><b>-</b></button>
+<button id="btn+E" class="button button0" onclick="PlusMinusClick('+E')" style="left: 520px"><b>+</b></button>
+<button id="btn-E" class="button button1" onclick="PlusMinusClick('-E')" style="padding: 0px 6px; left: 520px"><b>-</b></button>
+<button id="btn+F" class="button button0" onclick="PlusMinusClick('+F')" style="left: 623px"><b>+</b></button>
+<button id="btn-F" class="button button1" onclick="PlusMinusClick('-F')" style="padding: 0px 6px; left: 623px"><b>-</b></button>
+<button id="znakRown" class="buttonrown" style="padding: 0px 6px; left: 74px"><b>=</b></button>
+</div>
+<!-- zwijać -->
+<div class="Boxes">
+<input id="dimZ" class="box" style="left: 5px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="Z" type="Dim"><br>
+<input id="dimA" class="box" style="left: 139px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="A" value="" type="Dim"><br>
+<input id="dimB" class="box" style="left: 242px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="B" type="Dim"><br>
+<input id="dimC" class="box" style="left: 345px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="C" type="Dim"><br>
+<input id="dimD" class="box" style="left: 448px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="D"   type="Dim"><br>
+<input id="dimE" class="box" style="left: 549px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="E"  type="Dim"><br>
+<input id="dimF" class="box" style="left: 652px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="F"   type="Dim"><br>
+
+<input id="devUpZ" class="box" style="left: 48px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es" type="devUp"><br>
+<input id="devUpA" class="box" style="left: 180px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es" value="" type="devUp"><br>
+<input id="devUpB" class="box" style="left: 282px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es" type="devUp"><br>
+<input id="devUpC" class="box" style="left: 384px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es" type="devUp"><br>
+<input id="devUpD" class="box" style="left: 486px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es"   type="devUp"><br>
+<input id="devUpE" class="box" style="left: 588px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es"  type="devUp"><br>
+<input id="devUpF" class="box" style="left: 689px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="es"   type="devUp"><br>
+
+<input id="devDownZ" class="box" style="left: 48px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei" type="devDown"><br>
+<input id="devDownA" class="box" style="left: 180px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei" value="" type="devDown"><br>
+<input id="devDownB" class="box" style="left: 282px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei" type="devDown"><br>
+<input id="devDownC" class="box" style="left: 384px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei" type="devDown"><br>
+<input id="devDownD" class="box" style="left: 486px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei"   type="devDown"><br>
+<input id="devDownE" class="box" style="left: 588px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei"  type="devDown"><br>
+<input id="devDownF" class="box" style="left: 689px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" placeholder="ei"   type="devDown"><br>
+
+<input id="ZamdevUpZ" class="Zam" style="left: 50px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpA" class="Zam" style="left: 182px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpB" class="Zam" style="left: 284px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpC" class="Zam" style="left: 386px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpD" class="Zam" style="left: 488px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpE" class="Zam" style="left: 590px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+<input id="ZamdevUpF" class="Zam" style="left: 693px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devUpZam"><br>
+
+<input id="ZamdevDownZ" class="Zam" style="left: 50px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownA" class="Zam" style="left: 182px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownB" class="Zam" style="left: 284px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownC" class="Zam" style="left: 386px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownD" class="Zam" style="left: 488px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownE" class="Zam" style="left: 590px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+<input id="ZamdevDownF" class="Zam" style="left: 693px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" onfocusout="checkDev(id)" onfocus="HideOryginal(id)" onfocusout="CheckVisible(id)" type="devDownZam"><br>
+</div>
+<p id="DevAlert" style="position:absolute; left:325px; top: 210px; color: red; font-size:10px;"></p>
+<p id="RozWymiarow" style="position:absolute; left:10px; top: 210px"> Wybierz rozkład wymiarów wszystkich elementów:</p>
+<button id="Oblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(0); AcceptRozkladDiv(1)" style="top:250px"><b>Znajdź wymiar Z<br> metodą MinMax</b></button>
+<button id="RozkladOblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(1)" style="top:283px"><b>Rozkład wymiaru zależnego</b></button>
+<button id="ObliczDodatkowy" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:316px; padding-bottom: 2px; padding-top: 2px;"><b>Znajdź wymiar niezależny</b></button>
+<button id="Save-btn" class="buttonAllCheck btn sec" onclick="SaveToFile()" style="top:361px"><b>Zapisz wyniki</b></button>
+<button id="Zam_czesciowa" class="btn sec" onclick="AcceptBtnZamiennosc(id)" style="top:467px; left:150px; visibility:hidden; width:80px"><b>Zamienność częściowa</b></button>
+<div id="ZamiennoscDiv" class="Zamiennosc" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
+	<!--<p id="Zam_wymText"style="margin-left:10px;margin-top:50px;font: 700 13px/1 'Arial', arial">Wymiar początkowy:</p>
+	<p id="Zam_wymiar"style="left:138px;top:34px;font: 700 16px/1 'Arial', arial; position:absolute;"></p>
+	<p id="Zam_DevUp"style="left:170px;top:27px;font: 700 13px/1 'Arial', arial; position:absolute"></p>
+	<p id="Zam_DevDown"style="left:170px;top:46px;font: 700 13px/1 'Arial', arial; position:absolute"></p>-->
+	<p id="Zam_toler" style="color: white; margin-left:225px;width: 745px; margin-top:5px;font: 12px/1 'Arial', arial">Tolerancja:</p>
+	<!--<p id="Zam_tol%" style="margin-left:10px;width: 150px; font: 700 13px/1 'Arial', arial">Tolerancja większa o: 0%</p>
+	<p id="Zam_poletoler" style="margin-left:10px;width: 150px; font: 700 13px/1 'Arial', arial">Poza zakresem: 0%</p>-->
+</div>
+<div id="RozkladDiv" class="Rozklad RightTextArea" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
+    <p id="Parag_Max" style="color: white; margin-left:5px;width: 150px; margin-top:5px;font: 13px/1 'Arial', arial">Wymiar Max:</p>
+	<p id="Parag_Min" style="color: white; margin-left:5px;width: 150px; margin-top:-8px;font: 13px/1 'Arial', arial">Wymiar Min:</p>
+	<p id="Parag_Sredni" style="color: white; margin-left:5px;width: 170px; margin-top:-8px;font: 13px/1 'Arial', arial">Wymiar średni:</p>
+	<p id="Parag_Max_wykryte" style="color:aquamarine; margin-left:5px;width: 170px; margin-top:-8px;font: 13px/1 'Arial', arial">Wykryty wym. Max:</p>
+	<p id="Parag_Min_wykryte" style="color: aquamarine; margin-left:5px;width: 170px; margin-top:-8px;font: 13px/1 'Arial', arial">Wykryty wym. Min:</p>
+	<p id="Parag_Sigma" style="color: white; margin-left:5px;width: 170px; margin-top:-8px;font: 13px/1 'Arial', arial">Odchylenie stand:</p>
+
+</div>
+<p id="CompareText" style="margin-left:575px; margin-top:282px;font: 600 12px/1 'Arial', arial;color:black;visibility:hidden;">Wykorzystanie pola tolerancji w [ % ]:</p>
+<div id="CompareDiv" class="Compare RightTextArea" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
+    <p id="Compare_All" style="color: white; margin-left:2px;width: 172px; margin-top:5px;font: 10px/1 'Arial', arial">100% obserwacji: </p>
+    <p id="Compare_09973" style="color: white; margin-left:2px;width: 172px; margin-top:5px;font: 10px/1 'Arial', arial">99,73% obserwacji (3σ):  </p>
+    <p id="Compare_099" style="color: white; margin-left:2px;width: 172px; margin-top:5px;font: 10px/1 'Arial', arial">99% obserwacji (2,57583σ): </p>
+</div>
+<button id="ChartHistogramBtn" class="buttonAllCheck btn sec" onclick="HideShowChartHist()" style="width: 135px; top:467px; left:10px; visibility:hidden;"><b>Histogram rozkładów wymiarów niezależnych</b></button>
+<button id="ZoomIn" style="position:absolute; width:30px; left:720px; top: 0px" onclick="PageZoom(id)">
+  <img src="https://png.icons8.com/metro/50/000000/zoom-in.png" />
+</button>
+<button id="ZoomOut" style="position:absolute; width:30px; left:720px; top: 25px" onclick="PageZoom(id)">
+<img src="https://png.icons8.com/metro/50/000000/zoom-out.png">
+</button>
+<!--<button class="buttonAllCheck btn sec" style="top:385px;  z-index: 0">-->
+<div class="buttonAllCheck btn sec" style="top:388px; width: 112px; text-align: center;border-radius: 6px; font: 700 9.4px/1 'Open Sans', sans-serif;  box-shadow: inset 0 -1px 0 1px rgba(0, 0, 0, 0.35), inset 0 -10px 20px rgba(0, 0, 0, 0.25);">
+<input type="file" multiple class="form-control btn sec" id="file-input" >
+    <label for="file-upload" class="custom-file-upload" style="cursor:pointer"><b>Załaduj dane z pliku</b></label>
+</div>
+<button id="OdNowa" class="buttonAllCheck btn sec" onclick="window.location.href=window.location.href" style="top:416px; background-color:lightgray"><b>Zacznij od nowa, RESET</b>
+</button>
+
+<div id="ChartFinished" class='chart' style="position:absolute; left:60px; top:510px; height:350px; width:450px;">
+    <canvas id="ChartFinal" style="border: solid; border-radius: 10px; visibility: hidden"  ></canvas>
+</div>
+
+<div id="menu1" style="position:absolute; left:10px; top:25px; height:200px; width:800px; background-color:rgba(255, 255, 255, 1); z-index:0; display:none">
+
+</div>
+<div id="MiniChart1" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)" style="left:138px">
+</div>
+<div id="MiniChart2" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:240px">
+</div>
+<div id="MiniChart3" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:342px">
+</div>
+<div id="MiniChart4" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:444px">
+</div>
+<div id="MiniChart5" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:546px">
+</div>
+<div id="MiniChart6" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:648px">
+</div>
+</form>
+<script>
+    if (document.documentElement.clientWidth<document.body.clientWidth) {
+           document.body.style.transform="scale("+((document.body.clientWidth/(1.1*document.documentElement.clientWidth)).toFixed(1))+")"; 
+       } else {
+           document.body.style.transform="scale("+((document.documentElement.clientWidth/(1.1*document.body.clientWidth)).toFixed(1))+")"; 
+       }
+Description();  
+var scroll = document.body.style.transform;
+//document.documentElement.scrollTop = (1*parseFloat(scroll.replace( /[^\d\.]*/g, '')));
+var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+svg.setAttribute("width", "10000");
+svg.setAttribute("height", "1000");
+svg.setAttribute("id", "mysvg");
+var XNidoKW=[];
+var zmienneXTab=[];
+var rozNorm=[];
+var rozRown=[];
+var rozRayl=[];
+var rozTroj=[];
+var rozRaylPLUS=[];
+var rozNormAsym=[];
+var rozFinished=[];
+var rozFinishedTEMP=[];
+var rozMinMax=[];
+var TemprozFinished=[];
+var zmienneXFinished=[];
+var rozRownSum=[];
+var MaxRange=0.0;
+var myChart;
+var Chart1;
+var Chart00;
+var Chart11;
+var Chart12;
+var Chart13;
+var Chart14;
+var Chart15;
+var Chart16;
+var index_zmiany;
+var index_losowan=0.0;
+var index_ucinania_dołu;
+var MaxScale=0.0;
+var MaxScaleHistogram=0.0;
+var MaxScale_index=0;
+var Finished_Sum=0.0;
+var Finished_OutOfRange=0.0;
+var OrgDim=0.0;
+var OrgDevUp=0.0;
+var OrgDevDown=0.0;
+var SaveIndex=0;
+var FileName="";
+    document.getElementById("ChartFinal").style.visibility = "hidden";
+<!-- document.getElementById('test').onclick=function(){ -->
+	<!-- document.getElementByClassName('set green').className="btn sec"; -->
+	<!-- document.getElementById('test').className="btn left1"; -->
+<!-- } -->
+document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+//Copy there
+</script>
+</body>
+</html>
