@@ -128,7 +128,6 @@ function getRgb(string) {
    var rgba = getRgba(string);
    return rgba && rgba.slice(0, 3);
 }
-
 function getHsl(string) {
   var hsla = getHsla(string);
   return hsla && hsla.slice(0, 3);
