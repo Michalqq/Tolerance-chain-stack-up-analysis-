@@ -21,8 +21,15 @@ function PageZoom(id){
 }
 function HideShowChartHist(){
    if (document.getElementById("chartHistogram").style.visibility=="hidden"){
-       var scroll = document.body.style.transform;
-    document.documentElement.scrollTop = (200*parseFloat(scroll.replace( /[^\d\.]*/g, '')));
+       var scroll = document.body.style.transform.replace( /[^\d\.]*/g, '');
+       var index=1;
+       var tempScale=(document.documentElement.scrollTop-150*scroll)/10;
+       if (tempScale<20*scroll) tempScale=0;
+       var interval = setInterval(function(){
+           document.documentElement.scrollTop = (document.documentElement.scrollTop - tempScale);
+           index += 1;
+           if (index>10) clearInterval(interval)
+           ;}, 20);
        document.getElementById("chartHistogram").style.visibility="visible";
        document.getElementById("ChartHistogramBtn").className="btn pri";
        document.getElementById("ChartHistogramBtn").value="checked";
@@ -1618,9 +1625,16 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
         AddChart(rozFinished,zmienneXFinished,text,3,"ChartFinal");
         var indexx=0;
-        rozFinishedTEMP=[];
-        var scroll = document.body.style.transform;
-        document.documentElement.scrollTop = (470*parseFloat(scroll.replace( /[^\d\.]*/g, '')));
+        rozFinishedTEMP=[];   
+        //alert(document.documentElement.scrollTop);
+        var scroll = document.body.style.transform.replace( /[^\d\.]*/g, '');
+        var index=1;
+        var tempScale=(document.documentElement.scrollTop-450*scroll)/10;
+        var interval = setInterval(function(){
+           document.documentElement.scrollTop = (document.documentElement.scrollTop - tempScale);
+           index += 1;
+           if (index>10) clearInterval(interval)
+           ;}, 20);
         CalculateSigma(rozFinished,zmienneXFinished);
         document.getElementById("Zam_czesciowa").style.visibility = "visible";
         document.getElementById("ChartHistogramBtn").style.visibility = "visible";
