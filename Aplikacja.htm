@@ -3,7 +3,7 @@
 Politechnika Warszawska
 wydział Samochodów i Maszyn Roboczych
 
-Strona została zbudowana w ramach pracy pt. 
+Strona została zbudowana w ramach pracy magisterskiej pt. 
 "Aplikacja do modelowania analizy i syntezy wymiarowej"
 
 Autor: Michał Kraciuk
@@ -47,6 +47,7 @@ Kontakt:  kraciukmichal@gmail.com-->
       <p id="ChartHist4Wym" class="chartHistDim" style="left: 400px;"> </p>
        <p id="ChartHist5Wym" class="chartHistDim" style="left:520px;"> </p>
         <p id="ChartHist6Wym" class="chartHistDim" style="left: 645px;"> </p>
+   
     <div id="ChartHist1" class='chartHist' style="background-color: white; margin=0px; display: block; z-index: 2; left:-87px;" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
     <canvas id="CharttHist1" ></canvas>
      </div>
@@ -208,7 +209,7 @@ Kontakt:  kraciukmichal@gmail.com-->
 <div id="container" style="margin-top:235px; position:absolute; visibility:hidden; background-color:#eee; z-index:3" ></div>
 <div id="container2" style="margin-top:220px;width: 750px;height: 300px; position:absolute; visibility:hidden; background-color:azure; z-index:3; border-radius: 20px;box-shadow: inset 0 1px 0 0px rgba(0, 0, 0, 0.2), inset 0 8px 10px rgba(0, 0, 0, 0.2);" >
 	<img src="image/logoSIMR.jpg" alt="Logo Politechnika Warszawska" style="position: absolute;opacity: 0.95; z-index: 3; margin-left: 625px; margin-top: 15px; border-radius: 15px" width="120" height="120">
-    <p id="Description" style="margin-left:25px;margin-top:15px;font: 13px/1 'Arial', arial"><b>Politechnika Warszawska</b>, wydział Samochodów i Maszyn Roboczych<br><br>Strona została zbudowana w ramach pracy pt. <br><i><b>"Aplikacja do modelowania analizy i syntezy wymiarowej"</b></i><br> <br><br> Autor: &nbsp&nbsp<b>Michał Kraciuk</b> <br><br> Promotor pracy: <b>Dr inż. Zbigniew Humienny</b><br><br> WARSZAWA, 2018<br>Wersja 1.0 - 30.08.2018&nbsp&nbsp Kontakt:  <i>  kraciukmichal@gmail.com</i>    
+    <p id="Description" style="margin-left:25px;margin-top:15px;font: 13px/1 'Arial', arial"><b>Politechnika Warszawska</b>, wydział Samochodów i Maszyn Roboczych<br><br>Strona została zbudowana w ramach pracy magisterskiej pt. <br><i><b>"Aplikacja do modelowania analizy i syntezy wymiarowej"</b></i><br> <br><br> Autor: &nbsp&nbsp<b>Michał Kraciuk</b> <br><br> Promotor pracy: <b>Dr inż. Zbigniew Humienny</b><br><br> WARSZAWA, 2018<br>Wersja 1.0 - 06.11.2018&nbsp&nbsp Kontakt:  <i>  kraciukmichal@gmail.com</i>    
 </div>
 <div class="BtnSchedule" style="background-color:white; width:605px; height:210px; border: solid; border-radius: 10px;" >
   <div class='BtnLeft1' >
@@ -383,7 +384,7 @@ Kontakt:  kraciukmichal@gmail.com-->
     <p id="Compare_09973" style="color: white; margin-left:2px;width: 172px; margin-top:5px;font: 10px/1 'Arial', arial">99,73% obserwacji (3σ):  </p>
     <p id="Compare_099" style="color: white; margin-left:2px;width: 172px; margin-top:5px;font: 10px/1 'Arial', arial">99% obserwacji (2,57583σ): </p>
 </div>
-<button id="ChartHistogramBtn" class="buttonAllCheck btn sec" onclick="HideShowChartHist()" style="width: 135px; top:467px; left:10px; visibility:hidden;"><b>Histogram rozkładów wymiarów niezależnych</b></button>
+<button id="ChartHistogramBtn" class="buttonAllCheck btn sec" onclick="HideShowChartHist()" style="width: 140px; padding: 5px 1px 5px 1px; top:467px; left:4px; visibility:hidden;"><b>Histogram rozkładów wymiarów niezależnych</b></button>
 <button id="ZoomIn" style="position:absolute; width:30px; left:720px; top: 0px" onclick="PageZoom(id)">
   <img src="https://png.icons8.com/metro/50/000000/zoom-in.png" />
 </button>
@@ -474,7 +475,6 @@ var FileName="";
 	<!-- document.getElementById('test').className="btn left1"; -->
 <!-- } -->
 document.getElementById('file-input').addEventListener('change', readSingleFile, false);
-							
 //Copy there
 </script>
 </body>

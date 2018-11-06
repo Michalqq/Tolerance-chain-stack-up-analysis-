@@ -1622,7 +1622,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                      k=-1;
                  }    
 	   } 
-        document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
+        document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
         AddChart(rozFinished,zmienneXFinished,text,3,"ChartFinal");
         var indexx=0;
         rozFinishedTEMP=[];   
@@ -1681,7 +1681,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             }
            //alert(" asd"+temp + "  " + temp2);
             if (j==0){
-            document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
+            document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
             } else {
             document.getElementById("Compare_099").innerHTML ="99% obserwacji (2,57583σ):  <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
             }
