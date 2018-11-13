@@ -47,14 +47,16 @@ rect.setAttribute("x", X);
 rect.setAttribute("y", Y);
 rect.setAttribute("width", Width);
 rect.setAttribute("height", Height);
+rect.setAttribute("rx", 4);
+rect.setAttribute("ry", 4);
 svg.appendChild(rect);
 	Drawarrow(X,Y,Width,Height,0,Direction,);//Strzałka
 	Drawarrow(X,Y,Width,Height,1,Direction);//Strzałka
 	Drawarrow(X,Y,Width,Height,2,Direction);//Strzałka
 	if (colorRGB=="black"){
-    Drawarrow(X,Y,Width,Height,0,Direction,"white");//Strzałka w prawo
-	Drawarrow(X,Y,Width,Height,1,Direction,"white");//Strzałka w prawo
-	Drawarrow(X,Y,Width,Height,2,Direction,"white");//Strzałka w prawo
+    //Drawarrow(X,Y,Width,Height,0,Direction,"white");//Strzałka w prawo
+	//Drawarrow(X,Y,Width,Height,1,Direction,"white");//Strzałka w prawo
+	//Drawarrow(X,Y,Width,Height,2,Direction,"white");//Strzałka w prawo
 	Drawarrow(X,Y,Width,Height,0,(Direction*-1),"white");//Strzałka w lewo
 	Drawarrow(X,Y,Width,Height,1,(Direction*-1),"white");//Strzałka w lewo 
 	Drawarrow(X,Y,Width,Height,2,(Direction*-1),"white");//Strzałka w lewo
@@ -668,7 +670,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 	var sigmaRownom=0.0;
 	var zakres=0.0;
     var Temp1=0.0;
-	var podzialka=45;
+	var podzialka=47;
 	var BTNlistpos=id.substring(2,3);
     var dimTemp=0;
     var ChartScale=100;
@@ -728,7 +730,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 		//alert("Odchyłka górna nie może być mniejsza od odchyłki dolnej\nAkcja przerwana");
 		return;
 	}
-	Finished_OutOfRange=0.0;
+	var Finished_OutOfRange=0.0;
 	XNidoKW=[];
 	zmienneXTab=[];
 	rozNormAsym=[];
@@ -752,7 +754,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 		//skok=MaxRange/podzialka;
 		//MinDim=parseFloat(srednia-(MaxRange/2));
 	}
-	for(i=0; i<podzialka+1; i++) { //Obliczanie kwadratu roznicy (x - ni) , zmiennych x. r.normalny
+	for(i=0; i<(podzialka+1); i++) { //Obliczanie kwadratu roznicy (x - ni) , zmiennych x. r.normalny
 			if (i>0) {
 				MinDim=MinDim+skok;
 			}
@@ -781,9 +783,9 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 	} else {
 		sigmaRownom=1/zakres;
 	}
-    sigmaNorm=zakres/(2*Math.sqrt(3*Math.PI));
+    //sigmaNorm=zakres/(2*Math.sqrt(3*Math.PI));
     //alert(sigmaNorm + "  sigma2= "+(zakres/(2*Math.sqrt(3)))+ "  sigma3= " + zakres/6)
-    //sigmaNorm=zakres/6;
+    sigmaNorm=zakres/6;
     sigmaRownom=1/zakres;
 	MaxDim=zmienneXTab[zmienneXTab.length-1];
 	MinDim=zmienneXTab[0];
@@ -795,7 +797,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
     var SUMROZKLADNORMALNY1=0.0
     var SUMROZKLADNORMALNY2=0.0
     var SUMROZKLADNORMALNY3=0.0
-		for(i=0; i<1.0*podzialka+1; i++) { //obliczanie wartosci dla wszystkich rozkladow
+		for(i=0; i<1.0*(podzialka+1); i++) { //obliczanie wartosci dla wszystkich rozkladow
 			CheckNext=0;	
             temp=Math.pow(Math.E,(-1*XNidoKW[i])/(2*Math.pow(sigmaNorm,2)));
 				if (BTNlistpos==1){ //rozklad normalny
@@ -825,7 +827,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                         rozMinMax.push(MinMaxTable[Math.round(Math.random())]);
                     if (Multiple==0){
 						}
-                    if (i<=podzialka/2){ //I połowa trójkąta
+                    if (i<=(podzialka/2)){ //I połowa trójkąta
 							if (Multiple!=0){
                                 if ((MaxRange/2-(zakres-(MaxRange-2*zakres)*0.1)/2.2-i*(zakres/podzialka))<=0){
                                     
@@ -880,8 +882,8 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                             } 
                         rozMinMax[i]=0;    
                         }
-                        rozMinMax[0]=(temp*(index_zmiany/45).toFixed(0));
-                        rozMinMax[45]=((46-temp)*(index_zmiany/45).toFixed(0));
+                        rozMinMax[0]=(temp*(index_zmiany/podzialka).toFixed(0));
+                        rozMinMax[podzialka]=((podzialka+1-temp)*(index_zmiany/podzialka).toFixed(0));
                         break;
 				case 0:
 					//rozNorm[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozNorm)),index_zmiany,index_ucinania_dołu));
@@ -1209,14 +1211,16 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
     var ctxFinal = document.getElementById(id).getContext('2d');
 	document.getElementById(id).style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
     document.getElementById(id).style.visibility = "visible";
-	var ColorIndex=['rgba(0, 155, 205, 0.9)','rgba(255, 0, 0, 0.9)','rgba(0,255, 0, 0.9)',
+	var ColorIndex=['rgba(0, 155, 205, 0.9)','rgba(255, 0, 0, 0.9)','rgba(0,205, 0, 0.9)',
                     'rgba(0, 0, 255, 0.9)','rgba(90, 135, 25, 0.9)','rgba(150, 20, 20, 0.9)',
                     'rgba(0, 0, 0, 0.9)'];
 	var ColorIndex1=[];
 	for (i=0; i<=80; i++){ //Lista kolorów słupków wykresu złożenia
 	ColorIndex1[i]=ColorIndex[colorIndex];
-	}   
+	}  
 	  var configFinal = {options: {
+            tooltips: {enabled: true},
+            hover: {mode: null},
 			maintainAspectRatio: false,
 			scales: {
 				yAxes: [{
@@ -1241,34 +1245,54 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
 				label: label,
 				data: dataY, 
 				backgroundColor:ColorIndex1,
-				borderColor:ColorIndex[colorIndex],
+				//borderColor:ColorIndex[colorIndex],
 				borderWidth: 0.1,
-				pointRadius: 2
-			}]
+				pointRadius: 5
+			},/*{ // Green MinDim, MaxDim
+                label:"",
+				data: dataY,
+                backgroundColor:ColorIndex[6],
+				borderWidth: 1,
+				pointRadius: 1
+            }*/
+            ]
 			
 	};
 		if (myChart!=null){
 			myChart.destroy()
 		}
 	myChart = new Chart(ctxFinal,configFinal);
-	if (document.getElementById("Zam_czesciowa").value=="checked"){ 
-		for (i=0; i<dataX.length; i++) {
-			if(dataX[i]<OrgDim) { // 1 połowa wykresu
-				if (dataX[i]<(parseFloat(OrgDim)+parseFloat(OrgDevDown))){
-					if (isNaN(dataY[i])){
-                        dataY[i]=0;
-                    }
-                    Finished_OutOfRange=parseFloat(Finished_OutOfRange)+parseFloat(dataY[i]);
+	if (document.getElementById("Zam_czesciowa").value=="checked"){ // Red and yellow bars on total interchangeability chart
+        for (i=0; i<dataX.length; i++) {
+            let minOrgDim = (parseFloat(OrgDim)+parseFloat(OrgDevDown)).toFixed(3);
+            let maxOrgDim = (parseFloat(OrgDim)+parseFloat(OrgDevUp)).toFixed(3);
+			if (isNaN(dataY[i]) || dataY[i]===undefined) {
+                    dataY[i]=0;
+                }
+            if(dataX[i]<OrgDim) { // first half of chart
+                if (dataX[i]<minOrgDim) {
+				    Finished_OutOfRange=parseFloat(Finished_OutOfRange)+parseFloat(dataY[i]);
 					myChart.data.datasets[0].backgroundColor[i] = ColorIndex[1];	
 				}
-			} else if (dataX[i]>OrgDim) { // 2 połowa wykresu
-				if (dataX[i]>(parseFloat(OrgDim)+parseFloat(OrgDevUp))){
-					if (isNaN(dataY[i])){
-                        dataY[i]=0;
-                    }
+                if (dataX[i+1]>=minOrgDim && dataX[i]<minOrgDim) { //green left bar on chart
+                    dataX[i+1]=parseFloat(minOrgDim);
+                    dataY[i+1]=parseFloat((Math.max.apply(Math, dataY)*1.05).toFixed(0));
+				    myChart.data.datasets[0].backgroundColor[i+1] = ColorIndex[2];
+                    document.getElementById('minOrgDimDownDIV').innerHTML=minOrgDim;
+                    document.getElementById('minOrgDimDownDIV').style.left=80 + i*8.1 + "px";
+                }
+            } else if (dataX[i]>OrgDim) { // second half of chart
+				if (dataX[i]>maxOrgDim) {
                     Finished_OutOfRange=parseFloat(Finished_OutOfRange)+parseFloat(dataY[i]);
                     myChart.data.datasets[0].backgroundColor[i] = ColorIndex[1];	
 				}
+                if (dataX[i+1]>maxOrgDim && dataX[i]<=maxOrgDim) { // green right bar on chart
+                    dataX[i]=parseFloat(maxOrgDim);
+                    dataY[i]=parseFloat(Math.max.apply(Math, dataY));
+				    myChart.data.datasets[0].backgroundColor[i] = ColorIndex[2];
+                    document.getElementById('minOrgDimUpDIV').innerHTML=maxOrgDim;
+                    document.getElementById('minOrgDimUpDIV').style.left=90 + (i)*8.25 + "px";	
+                }
 			}
 		}
 	}
@@ -1391,6 +1415,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
     rozMinMax=[];
 	Finished_Sum=0.0;
     MaxScaleHistogram=0.0;
+    let podzialka=47;
 	var ScheduleBtn=GetScheduledBtn();
 	var zakres=0.0;
 	var DimIndex=["a", "A", "B", "C", "D", "E", "F"];
@@ -1581,8 +1606,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 		}
 		document.getElementById("Zam_toler").innerHTML ="Tolerancja =<b>" + zakres.toFixed(2)+"</b>"+ " &nbsp    Tolerancja większa o:<b>" + DimTemp+"%"+ "</b> &nbsp      Poza zakresem pola tolerancji:";
 		rozFinishedTEMP.sort(function(a, b){return a-b});
-        console.log("ROZFINISHED="+rozFinishedTEMP + " rozzzz length     ==="+rozFinishedTEMP.length);
-        zakres=zakres/45;
+        //console.log("ROZFINISHED="+rozFinishedTEMP + " rozzzz length     ==="+rozFinishedTEMP.length);
+        zakres=zakres/podzialka;
             var k=0;
             temp=temp*0;
             for (i=0; i<rozFinishedTEMP.length; i++){
@@ -1597,7 +1622,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                 }
               }
         zmienneXFinished=[];
-         for(k=0; k<46; k++) {
+         for(k=0; k<(podzialka+1); k++) {
           zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
              if (rozFinished[k]!=null){
                  if (rozFinished[k]==0 && temp1==0){ // sprawdzanie od lewej strony jaki zakres tolerancji jest wykorzystany
@@ -1614,9 +1639,9 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         }
         temp1=0;
         temp=0;
-        for(k=45; k>=0; k--) {  // sprawdzanie od prawej strony jaki zakres tolerancji jest wykorzystany
+        for(k=podzialka; k>=0; k--) {  // sprawdzanie od prawej strony jaki zakres tolerancji jest wykorzystany
             if ((rozFinished[k]==0 || rozFinished[k]==null) && temp1==0){    
-                temp=Math.abs(46-k);
+                temp=Math.abs((podzialka+1)-k);
                  } else if (temp1==0) {
                      temp1=1;
                      k=-1;
@@ -1638,13 +1663,12 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         CalculateSigma(rozFinished,zmienneXFinished);
         document.getElementById("Zam_czesciowa").style.visibility = "visible";
         document.getElementById("ChartHistogramBtn").style.visibility = "visible";
-        //alert(parseFloat(Finished_OutOfRange) + "  "+parseFloat(Finished_Sum))
 		document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"<b>"+ (parseFloat(Finished_OutOfRange)*100/parseFloat(Finished_Sum)).toFixed(2)+"%"+"</b>";
         document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"<br>Liczba losowań: <b>"+Finished_Sum+"</b>";
         document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"&nbsp &nbsp Liczba elementów poza zakresem: <b>"+Finished_OutOfRange+"</b>";
 	    
         for(j=0; j<2; j++){         // odrzucamy tak by zostało: 9973% i 99% obserwacji
-            var k=45;
+            var k=podzialka;
             temp=0;
             temp2=0;
             if (j==0){
@@ -1652,7 +1676,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             } else {
             temp1=parseFloat(index_losowan*0.01);
             }
-            for (i=0; i<46 ; i++){ 
+            for (i=0; i<(podzialka+1) ; i++){ 
                 if (isNaN(rozFinished[k])) {
                     rozFinished[k]=0;
                 }
@@ -1741,15 +1765,15 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         }
         document.getElementById("Parag_Max").innerHTML ="Wymiar Max: <b>"+(parseFloat(OrgDim)+parseFloat(DevUpNew))+"</b>";
         document.getElementById("Parag_Min").innerHTML ="Wymiar Min: <b>"+(parseFloat(OrgDim)+parseFloat(DevDownNew))+"</b>";
-        for (i=0;i<45;i++){ //wykryty minimalny wymiar
+        for (i=0; i<podzialka; i++){ //wykryty minimalny wymiar
             if (rozFinished[i]>0){
-                document.getElementById("Parag_Min_wykryte").innerHTML ="Wykryty wym. Min: <b>"+zmienneXFinished[i]+"</b>";
-                i=46;
+                document.getElementById("Parag_Min_wykryte").innerHTML ="Wykryty wym. Min: <b>"+zmienneXFinished[i].toFixed(3)+"</b>";
+                i=podzialka+1;
                 }
         }
         for (i=rozFinished.length-1;i>0;i--){ //wykryty maksymalny wymiar
             if (rozFinished[i]>0){
-                document.getElementById("Parag_Max_wykryte").innerHTML ="Wykryty wym. Max: <b>"+zmienneXFinished[i]+"</b>";
+                document.getElementById("Parag_Max_wykryte").innerHTML ="Wykryty wym. Max: <b>"+zmienneXFinished[i].toFixed(3)+"</b>";
                 i=0;
                 }
         }
