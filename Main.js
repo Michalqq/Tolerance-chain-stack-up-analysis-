@@ -287,7 +287,11 @@ function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
 	document.getElementById(id).className = "active";
 	document.getElementById("container").style.visibility = "hidden";
     document.getElementById("container2").style.visibility = "hidden";
-    document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów dla wszystkich elementów:"
+    if (document.getElementById("Zam_czesciowa").value=="checked"){
+        document.getElementById("RozWymiarow").innerHTML=" &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:";
+    } else {
+        document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów dla wszystkich elementów:";
+    }
 	switch(id) {
     case "MenuGłówna":
         break;
@@ -392,10 +396,11 @@ function zoomOut(x){
 function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
 	var DimIndex=["Z", "A", "B", "C", "D", "E", "F"];
 	var Box = document.getElementById('dim'+DimIndex[0]);
-	if (document.getElementById(id).value=="checked"){ //zmiana koloru
+	if (document.getElementById(id).value=="checked"){ //zmiana koloru - przycisk włączony
 		document.getElementById(id).className="btn sec";
 		document.getElementById("ZamiennoscDiv").style.visibility = "hidden";
 		document.getElementById(id).className="btn sec";
+        document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów wszystkich elementów:"
 		for(i=0; i<7; i++) {
 			Box = document.getElementById('dim'+DimIndex[i]);
 			Box.disabled=false;
@@ -413,6 +418,9 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
             document.getElementById("ZamdevDown"+DimIndex[i]).style.display="none";
             document.getElementById("ZamdevUp"+DimIndex[i]).value="";
             document.getElementById("ZamdevDown"+DimIndex[i]).value="";
+            if (i!=0) {
+                document.getElementById("tolBigger"+DimIndex[i]).style.display="none";
+            }
 			CheckVisible("ZamdevUp"+DimIndex[i]);
 			CheckVisible("ZamdevDown"+DimIndex[i]);
 		}
@@ -428,15 +436,20 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
             Box = document.getElementById('devDown'+DimIndex[i]);
 			Box.disabled=true;
 			Box.style="left:"+Box.style.left+"; background-color: #00a80e";
+            document.getElementById("RozWymiarow").innerHTML=" &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:"
             if (document.getElementById("dim"+DimIndex[i]).value!=""){
                 document.getElementById("dim"+DimIndex[i]).style.color='red';
                 document.getElementById("devUp"+DimIndex[i]).style.color='red';
                 document.getElementById("devDown"+DimIndex[i]).style.color='red';
                 document.getElementById("ZamdevUp"+DimIndex[i]).style.display="block";
                 document.getElementById("ZamdevDown"+DimIndex[i]).style.display="block";
+                if (i!=0) {
+                    document.getElementById("tolBigger"+DimIndex[i]).style.display="block";
+                }
             }
 			CheckVisible("ZamdevUp"+DimIndex[i]);
 			CheckVisible("ZamdevDown"+DimIndex[i]);
+            
 		}
 		document.getElementById("ZamiennoscDiv").style.visibility = "visible";
 		document.getElementById(id).className="btn pri";
@@ -839,7 +852,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 							//temp=(3*sigmaRownom/zakres)*(zmienneXTab[i]-MinDim);
 							temp=(4/(zakres*zakres))*(zmienneXTab[i]-MinDim);
                             rozTroj.push(temp);
-                        SUMROZKLADNORMALNY3=SUMROZKLADNORMALNY3+rozTroj[i];
+                            SUMROZKLADNORMALNY3=SUMROZKLADNORMALNY3+rozTroj[i];
                             tempMax=Math.max.apply(Math,rozRown);
                             if (isFinite(tempMax)==false){
                                 tempMax=(2*sigmaRownom/zakres*(zmienneXTab[1]-MinDim))*0.4;
@@ -858,7 +871,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                             //temp=(3*sigmaRownom/zakres)*(zmienneXTab[zmienneXTab.length-1]-zmienneXTab[i]);
                             temp=(4/(zakres*zakres))*(zmienneXTab[zmienneXTab.length-1]-zmienneXTab[i]);
 							rozTroj.push(temp);
-                        SUMROZKLADNORMALNY3=SUMROZKLADNORMALNY3+rozTroj[i];
+                            SUMROZKLADNORMALNY3=SUMROZKLADNORMALNY3+rozTroj[i];
 							//rozTroj.push(2.2*temp);
 						}
 					} 
@@ -1255,8 +1268,7 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
 				borderWidth: 1,
 				pointRadius: 1
             }*/
-            ]
-			
+            ]	
 	};
 		if (myChart!=null){
 			myChart.destroy()
@@ -1279,7 +1291,9 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
                     dataY[i+1]=parseFloat((Math.max.apply(Math, dataY)*1.05).toFixed(0));
 				    myChart.data.datasets[0].backgroundColor[i+1] = ColorIndex[2];
                     document.getElementById('minOrgDimDownDIV').innerHTML=minOrgDim;
-                    document.getElementById('minOrgDimDownDIV').style.left=80 + i*8.1 + "px";
+                    document.getElementById('minOrgDimDownDIV').setAttribute('data-value', i);
+                    document.getElementById('minOrgDimDownDIV').style.left=80 + i*8.15 + "px";
+                    document.getElementById('minOrgDimDownDIV').style.visibility = "visible";
                 }
             } else if (dataX[i]>OrgDim) { // second half of chart
 				if (dataX[i]>maxOrgDim) {
@@ -1291,14 +1305,18 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
                     dataY[i]=parseFloat(Math.max.apply(Math, dataY));
 				    myChart.data.datasets[0].backgroundColor[i] = ColorIndex[2];
                     document.getElementById('minOrgDimUpDIV').innerHTML=maxOrgDim;
+                    document.getElementById('minOrgDimUpDIV').setAttribute('data-value', (i+1));
                     document.getElementById('minOrgDimUpDIV').style.left=90 + (i)*8.25 + "px";	
+                    document.getElementById('minOrgDimUpDIV').style.visibility = "visible";
                 }
 			}
 		}
-	}
+	} else {
+        document.getElementById('minOrgDimDownDIV').style.visibility = "hidden";
+        document.getElementById('minOrgDimUpDIV').style.visibility = "hidden";
+    }
 	myChart.update(); 
     document.getElementById("ChartFinished").style.height=((document.documentElement.clientHeight/4)+90)+"px"
-	
 }
 function AlertButton(index){ // Podświetlanie na czerwono listy przycisków rozkładu na 0.5s
 var ButtonID="BtnChart";
@@ -1319,7 +1337,7 @@ function checkDev(id){
     var devDown="devDown";
     var devUp="devUp";
     if (id.length>8) { //zamienność
-       index=id.substring(6,8);
+        index=id.substring(6,8);
         devUp="Zam"+devUp;
         devDown="Zam"+devDown;
     }  else {//odchyłki zwykłe
@@ -1328,29 +1346,33 @@ function checkDev(id){
         if (index=="Up") {
             boxDown=document.getElementById(devDown+id.substr(id.length-1,id.length));
             boxUp=document.getElementById(id);
-            if (boxDown.value!="" && parseFloat(boxUp.value.replace(",","."))<parseFloat(boxDown.value.replace(",","."))) {
-            boxUp.style.backgroundColor="red";
-            document.getElementById("DevAlert").innerHTML="Odchyłka górna nie może być mniejsza niż odchyłka dolna !"
-                setTimeout(function() {
-            boxUp.style.backgroundColor="#aaf7aa";
-            boxUp.value="";  
-            }, 1500);
-                setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);
+            if (boxDown.value!="" && parseFloat(boxUp.value.replace(",","."))<=parseFloat(boxDown.value.replace(",","."))) {
+                boxUp.style.backgroundColor="red";
+                document.getElementById("DevAlert").innerHTML="Odchyłka górna nie może być mniejsza lub równa odchyłce dolnej !"
+                document.getElementById("DevAlert").style.backgroundColor="white";
+                    setTimeout(function() {
+                boxUp.style.backgroundColor="#aaf7aa";
+                boxUp.value="";  
+                }, 1500);
+                    setTimeout(function() {
+                        document.getElementById("DevAlert").innerHTML=""
+                        document.getElementById("DevAlert").style.backgroundColor="";}, 5000);
             }
         } else if (index=="Do") {
             boxUp=document.getElementById(devUp+id.substr(id.length-1,id.length));
             boxDown=document.getElementById(id);
-            if (boxUp.value!="" && parseFloat(boxDown.value.replace(",","."))>parseFloat(boxUp.value.replace(",","."))) {
-            boxDown.style.backgroundColor="red";
-            document.getElementById("DevAlert").innerHTML="Odchyłka górna nie może być mniejsza niż odchyłka dolna !"
-                setTimeout(function() {
-            boxDown.style.backgroundColor="#aaf7aa";
-            boxDown.value="";  
-            }, 1500);
-                setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);
+            if (boxUp.value!="" && parseFloat(boxDown.value.replace(",","."))>=parseFloat(boxUp.value.replace(",","."))) {
+                boxDown.style.backgroundColor="red";
+                document.getElementById("DevAlert").innerHTML="Odchyłka górna nie może być mniejsza lub równa odchyłce dolnej !"
+                    setTimeout(function() {
+                boxDown.style.backgroundColor="#aaf7aa";
+                boxDown.value="";  
+                }, 1500);
+                    setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);
             }
-        
-        
+        }
+    if (id.length>8) { //zamienność
+        tolBiggerCalc(id.substr(id.length-1,1));
     }
 }
 function GetScheduledBtn() { //Sprawdzamy jaki rozkład wymiarów został wybrany, sprawdzamy tylko takie dla której wymiar został wpisany, 
@@ -1403,7 +1425,36 @@ function MonteCarlo (dataY,dataX,index){
         temp=temp+dataYTEMP[i];
     }*/
     return dataYTEMP;
-}            
+}
+function tolBiggerCalc(dimIndex) {
+    //let dimIndex=["a", "A", "B", "C", "D", "E", "F"];
+	let devUp;
+	let devDown;
+    let zamDevUp;
+    let zamDevDown;
+    let tolBigger=0;
+    let element;
+    let zakresOld;
+    let zakresNew;
+    devUp = document.getElementById("devUp"+dimIndex).value.replace(",",".");
+    devDown = document.getElementById("devDown"+dimIndex).value.replace(",",".");
+    if (devUp!="" && devDown!=""){
+        element = document.getElementById("ZamdevUp"+dimIndex);
+        if (element != null) zamDevUp = element.value.replace(",",".");
+        else zamDevUp=devUp;
+        if (zamDevUp=="") zamDevUp=devUp;
+        element = document.getElementById("ZamdevDown"+dimIndex);
+        if (element != null) zamDevDown = element.value.replace(",",".");
+        else zamDevDown=devDown;
+        if (zamDevDown=="") zamDevDown=devDown;
+        zakresOld=(parseFloat(devUp)-parseFloat(devDown));
+        zakresNew=(parseFloat(zamDevUp)-parseFloat(zamDevDown));
+        tolBigger = (zakresNew-zakresOld)/zakresOld;
+        tolBigger = (tolBigger* 100).toFixed(1);
+        document.getElementById("tolBigger" + dimIndex).innerHTML = tolBigger + "%";
+    }
+    
+}
 function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	index_ucinania_dołu=0;
 	rozFinished=[];
@@ -1587,7 +1638,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                     index_zmiany=1;
                 }
                 index_ucinania_dołu=k;
-                Licz(ScheduleBtn[k],2,index_ucinania_dołu);	
+                Licz(ScheduleBtn[k],2,index_ucinania_dołu);
             }
         }
     }
@@ -1604,9 +1655,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 		if (OrgDevUp!=""){
 			DimTemp=((zakres-(parseFloat(OrgDevUp)-parseFloat(OrgDevDown)))*100/(parseFloat(OrgDevUp)-parseFloat(OrgDevDown))).toFixed(2);
 		}
-		document.getElementById("Zam_toler").innerHTML ="Tolerancja =<b>" + zakres.toFixed(2)+"</b>"+ " &nbsp    Tolerancja większa o:<b>" + DimTemp+"%"+ "</b> &nbsp      Poza zakresem pola tolerancji:";
+		document.getElementById("Zam_toler").innerHTML ="Tolerancja =<b>" + zakres.toFixed(3)+"</b>"+ " &nbsp &nbsp    Tolerancja większa o:<b>" + DimTemp+"%"+ "</b> &nbsp &nbsp      Poza przedziałem tolerancji:";
 		rozFinishedTEMP.sort(function(a, b){return a-b});
-        //console.log("ROZFINISHED="+rozFinishedTEMP + " rozzzz length     ==="+rozFinishedTEMP.length);
         zakres=zakres/podzialka;
             var k=0;
             temp=temp*0;
@@ -1647,11 +1697,14 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                      k=-1;
                  }    
 	   } 
-        document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
-        AddChart(rozFinished,zmienneXFinished,text,3,"ChartFinal");
+        document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
+        while (rozFinished.length!=(podzialka+1)) { // liczba rozkładów = podzialce
+            rozFinished.push(0);
+        }
+        rozFinishedTEMP=rozFinished.slice();
+        AddChart(rozFinishedTEMP,zmienneXFinished,text,3,"ChartFinal");
         var indexx=0;
-        rozFinishedTEMP=[];   
-        //alert(document.documentElement.scrollTop);
+        rozFinishedTEMP=[];  
         var scroll = document.body.style.transform.replace( /[^\d\.]*/g, '');
         var index=1;
         var tempScale=(document.documentElement.scrollTop-450*scroll)/10;
@@ -1665,49 +1718,62 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         document.getElementById("ChartHistogramBtn").style.visibility = "visible";
 		document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"<b>"+ (parseFloat(Finished_OutOfRange)*100/parseFloat(Finished_Sum)).toFixed(2)+"%"+"</b>";
         document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"<br>Liczba losowań: <b>"+Finished_Sum+"</b>";
-        document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"&nbsp &nbsp Liczba elementów poza zakresem: <b>"+Finished_OutOfRange+"</b>";
-	    
-        for(j=0; j<2; j++){         // odrzucamy tak by zostało: 9973% i 99% obserwacji
+        document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"&nbsp &nbsp &nbsp Liczba elementów poza zakresem: <b>"+Finished_OutOfRange+"</b>";
+	    Finished_OutOfRange=0;
+        for(j=0; j<3; j++){         // odrzucamy tak by zostało: 99,73% i 99% obserwacji
             var k=podzialka;
+            let maxDim=parseFloat(document.getElementById("minOrgDimUpDIV").getAttribute('data-value'));
+            let minDim=parseFloat(document.getElementById("minOrgDimDownDIV").getAttribute('data-value'));
+            if (isNaN(maxDim) || maxDim==0) maxDim=rozFinished[k];
+            if (isNaN(minDim) || minDim==0) minDim=rozFinished[0];
             temp=0;
             temp2=0;
             if (j==0){
-            temp1=parseFloat(index_losowan*0.0027);
+                temp1=parseFloat(index_losowan*0.0027);
+            } else if (j==1) {
+                temp1=parseFloat(index_losowan*0.01);
             } else {
-            temp1=parseFloat(index_losowan*0.01);
+                temp1=0
             }
-            for (i=0; i<(podzialka+1) ; i++){ 
-                if (isNaN(rozFinished[k])) {
-                    rozFinished[k]=0;
-                }
-                if (isNaN(rozFinished[i])) {
-                    rozFinished[i]=0;
-                }
-                if (parseFloat(rozFinished[k])<parseFloat(rozFinished[i])){
-                    if (temp1<rozFinished[k]){ // prawa strona 
-                        temp1=0.1;
-                        i=100;
-                    } else{
-                        temp2=temp2+1;
-                        temp1=(temp1-parseFloat(rozFinished[k])).toFixed(1);
+            if (j==2 && (document.getElementById("Zam_czesciowa").value=="checked")){
+                for (i=0; i<(podzialka+1) ; i++){ 
+                    if (isNaN(rozFinished[k])) rozFinished[k]=0;
+                    if (isNaN(rozFinished[i])) rozFinished[i]=0;
+                    if (parseFloat(rozFinished[k])<parseFloat(rozFinished[i])){ // prawa strona 
+                            if (temp1<rozFinished[k]){ 
+                                temp1=0.1;
+                                i=100;
+                            } else {
+                                if (k>maxDim && maxDim != podzialka) {
+                                    //alert("asdasd");
+                                    temp2=(maxDim-1-k);
+                                }
+                                else temp2=temp2+1;
+                                temp1=(temp1-parseFloat(rozFinished[k])).toFixed(1);
+                            }
+                            k=k-1;
                     }
-                    k=k-1;
-                }
-                else {
-                     if(temp1<rozFinished[i]){ // lewa strona 
-                        temp1=0.1;
-                        i=100;
-                    } else{
-                        temp=temp+1;
-                        temp1=(temp1-parseFloat(rozFinished[i])).toFixed(1);
+                    else { // lewa strona 
+                            if(temp1<rozFinished[i]){ 
+                                temp1=0.1;
+                                i=100;
+                            } else {
+                                if (i<minDim && minDim != 0) {
+                                    //alert("asdasd");
+                                    temp=(i-minDim-1);
+                                }
+                                else temp=temp+1;
+                                temp1=(temp1-parseFloat(rozFinished[i])).toFixed(1);
+                            }
                     }
                 }
             }
-           //alert(" asd"+temp + "  " + temp2);
             if (j==0){
-            document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
-            } else {
-            document.getElementById("Compare_099").innerHTML ="99% obserwacji (2,57583σ):  <b>"+(100-(temp+temp2)*2.222222).toFixed(2)+"%</b>";
+                document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
+            } else if (j==1) {
+                document.getElementById("Compare_099").innerHTML ="99% obserwacji (2,57583σ):  <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
+            } else if (j==2 && document.getElementById("Zam_czesciowa").value=="checked") {
+                document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>"; 
             }
         }
     }
