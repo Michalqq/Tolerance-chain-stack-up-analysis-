@@ -322,6 +322,18 @@ function HideShowDIV(id){ //Pokazywanie i ukrywanie mini wykresów przy wybieran
     }
 }
 function BlockChart(id){
+    for (i=1; i<7; i++){ // Wyłączanie zblokowanego jeśli taki istnieje
+        if (i!=id.substr(id.length-1,1)){
+            div=document.getElementById("MiniChart" + i);
+            if (div.value == "zoomedBlocked"){
+                div.style="left:"+div.style.left;
+                div.value="zoomed";
+                HideShowMaxChart("MiniChart" + i);
+                document.getElementById(id).value="chart";
+                HideShowMaxChart(id);
+           } 
+        }
+    }
 	var index=id.substring(9,10);
 	var div = document.getElementById(id);
 	for (i=1; i<5; i++) { //sprawdzanie który rozkład jest zaznaczony
@@ -332,7 +344,8 @@ function BlockChart(id){
 	var x = document.getElementById(id);
 	if (div.value=="zoomed"){
 		div.style="left:"+div.style.left+"; border:2px solid";
-		div.value="zoomedBlocked";		
+		div.value="zoomedBlocked";	
+        x.style.zIndex=2;
 	} else {
 		div.style="left:"+div.style.left;
 		div.value="zoomed";
@@ -357,18 +370,24 @@ function HideShowMaxChart(id) {
 	if (temp==1){
 		if (div.value=="zoomed"){
             document.getElementById(id.substr(0,5)+"t"+id.substring(5,8)).style.visibility="hidden";
-			x.className=OldChartClass;
-			x.style="";
-			x.style.zIndex="0";
+			x.className = OldChartClass;
+			x.style = "";
+			x.style.zIndex = "0";
 			x.style.display = 'none';
-			div.value="chart";
+			div.value = "chart";
+            for (i=1; i<7; i++){ // Do przełączania między podglądami gdy zablokowany 1 wykres
+               if (document.getElementById("MiniChart" + i).value == "zoomedBlocked"){
+                   div.value = "chart";
+                   HideShowMaxChart("MiniChart" + i);
+               } 
+            }
 		} else if (div.value=="chart"){
             document.getElementById(id.substr(0,5)+"t"+id.substring(5,8)).style.visibility="visible";
 			OldChartClass=x.className;
 			x.className="chartZoom";
 			x.style.backgroundColor="white";
 			x.style.left="20px";
-			x.style.zIndex="2";
+			x.style.zIndex=(10 - id.substring(5,6));
 			x.style.display = 'block';
 			if (div.value=="chart"){
 				div.value="zoomed";
@@ -1366,7 +1385,12 @@ function checkDev(id){
     }
 }
 function MyAlert(text, box, timeText, timeBox, clear) {
-    let tempColorStyle=box.style.backgroundColor;
+    let tempColorStyle;
+    if (box.style.backgroundColor!="red") {
+        tempColorStyle=box.style.backgroundColor;
+    } else {
+        tempColorStyle="";
+    }
     let tempZindexStyle=box.style.zIndex;
     if (box!=null) {
         box.style.backgroundColor="red";
