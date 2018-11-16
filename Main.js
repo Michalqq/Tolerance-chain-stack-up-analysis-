@@ -882,8 +882,6 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 					} 
 					zmienneXTab[i]=parseFloat(zmienneXTab[i].toFixed(4));
 		}
-    console.log(rozNormAsym);
-    console.log(rozNorm);
 	DataIndex=[rozMinMax,rozNorm, rozRown, rozTroj, rozRaylPLUS, rozRayl, rozNormAsym];
 	if (Multiple !=0){	
 	for (j=0; j<7; j++) {
@@ -894,7 +892,6 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                 switch(j-1){
                     case -1:
                         rozMinMax.sort(function(a, b){return a-b});
-                        //alert(rozMinMax);
                         for (i=0; i<rozMinMax.length; i++){
                             if(rozMinMax[i]<MinMaxTable[0]){
                                temp=temp+1; 
@@ -979,14 +976,13 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
             }
         
         }
-         TemprozFinished=[]; 
-        //alert(zmienneXTab.length+" index zmiany"+index_zmiany);
+        TemprozFinished=[]; 
         if (rozFinished.length==0){// Tworzenie tabeli ze zmiennymi o wymiarach A
             
             for (i=0; i<index_zmiany; i++) {
                     for(j=0; j<DataIndex[BTNlistpos][i]; j++){
                             //alert(zmienneXTab[i]);
-                            rozFinishedTEMP.push(parseFloat(zmienneXTab[i]));
+                            rozFinishedTEMP.push(parseFloat(Sign * zmienneXTab[i]));
                         }
                     }
             rozFinished=rozFinishedTEMP;
@@ -997,8 +993,6 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                         TemprozFinished.push(parseFloat(zmienneXTab[i]));
                         }
                     }
-            //alert(TemprozFinished.length + "  " + TemprozFinished);
-                //console.log(rozFinishedTEMP);
                 for (i=0; i<index_zmiany; i++){
                     if (BTNlistpos==0){
                         if (i<index_zmiany/3){
@@ -1028,7 +1022,6 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                     
                     }
             }
-		
 		temp=Math.max.apply(Math, rozFinished);	//Odejmowanie czesci wykresu w złożeniu
 		temp1=Math.min.apply(Math, rozFinished);
 	}
@@ -1048,7 +1041,9 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
         MaxScale=(((Math.max.apply(Math, rozRayl)*1.1-(Math.max.apply(Math, rozRayl)*1.1))*0.35)+Math.max.apply(Math, rozRayl)*1.2);
     }*/
 	zakres=parseFloat(DevUp)-parseFloat(DevDown);
-    MaxScale=5/(ChartScale+(zakres/ChartScale)*0.05);
+    //alert(zakres/ChartScale);
+    //MaxScale=3.2/(ChartScale+(zakres/ChartScale)*0.01);
+    MaxScale=44/(10*ChartScale + (zakres/ChartScale)*0.03);
     var ColorIndex1=[];
 	for (i=0; i<=80; i++){ //Lista kolorów słupków wykresu złożenia
 	ColorIndex1[i]=ColorIndex[BTNlistpos];
@@ -1068,7 +1063,6 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                         display: false,
 						beginAtZero:true,
 						//max:(Math.max.apply(Math, rozRayl)*1.05+0.2),
-                        
                     }
 				}],	
                 xAxes: [{
@@ -1486,7 +1480,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	Finished_Sum=0.0;
     MaxScaleHistogram=0.0;
     let podzialka=47;
-	var ScheduleBtn=GetScheduledBtn();
 	var zakres=0.0;
 	var DimIndex=["a", "A", "B", "C", "D", "E", "F"];
 	var DimNew=0.0;
@@ -1494,13 +1487,15 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	var DevDownNew=0.0;
 	var Sign=1;
 	var DimTemp=0.0;
-	if (ScheduleBtn==0) { return};
 	var scale=0.0;
 	var color="";
 	var temp=0.0;
 	var temp1=0.0;
 	var temp2=0.0;
 	var Xstart=0;
+    if (Param!=0) var ScheduleBtn=GetScheduledBtn();
+    else ScheduleBtn=1;
+	if (ScheduleBtn==0) { return};
     MaxRange=0.0;
 	DeleteSVG();
 	for (i=1; i<7; i++) { // Który wymiar pusty (gdzie wpisać dodatkowy)
@@ -1549,16 +1544,23 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 			return;
 		}
 		if (Dim!=""){
+            let btnMinusSign = document.getElementById("btn-"+DimIndex[i]);
+            let btnPlusSign = document.getElementById("btn+"+DimIndex[i]);
+            if (btnMinusSign.value != "checked" && btnPlusSign.value != "checked"){
+                btnPlusSign.value="checked"
+                btnPlusSign.className="button button2";
+                btnMinusSign.className="button button3";
+            }
 			if (document.getElementById("btn-"+DimIndex[i]).value=="checked") {
 				Sign=-1;
 			} // Obliczanie sumy wymiarów A-F z odchyłkami	
-			DimNew=parseFloat(DimNew)+parseFloat(Dim)*Sign;
+                DimNew=parseFloat(DimNew)+parseFloat(Dim)*Sign;
 			if (Sign==1) {
-			DevUpNew=parseFloat(DevUpNew)+parseFloat(DevUp)*Sign;
-			DevDownNew=parseFloat(DevDownNew)+parseFloat(DevDown)*Sign;
+                DevUpNew=parseFloat(DevUpNew)+parseFloat(DevUp)*Sign;
+                DevDownNew=parseFloat(DevDownNew)+parseFloat(DevDown)*Sign;
 			} else {
-			DevUpNew=parseFloat(DevUpNew)+parseFloat(DevDown)*Sign;
-			DevDownNew=parseFloat(DevDownNew)+parseFloat(DevUp)*Sign;
+                DevUpNew=parseFloat(DevUpNew)+parseFloat(DevDown)*Sign;
+                DevDownNew=parseFloat(DevDownNew)+parseFloat(DevUp)*Sign;
 			}
 			if (DevUpNew>0) {
 				DevUpNew="+" + DevUpNew;
@@ -1573,7 +1575,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	}
 }
 	if (Param==2){ // Obliczanie wymiaru niezależnego
-        
 		var BoxUp=document.getElementById("devUpZ");
         var BoxDown=document.getElementById("devDownZ");
         var Box=document.getElementById("dimZ");
@@ -1595,7 +1596,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                     setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);*/
                 return;
             }
-		
 		DevUp=document.getElementById("devUpZ").value.replace(",",".");
 		DevDown=document.getElementById("devDownZ").value.replace(",",".");
 		Dim=document.getElementById("dimZ").value.replace(",",".");
@@ -1639,7 +1639,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             }
         }
 	}
-    
     if (Param!=2){
         for(k=0; k<ScheduleBtn.length; k++) {
         var Dim=document.getElementById("dim"+DimIndex[ScheduleBtn[k].substring(0,1)]).value;
@@ -1688,10 +1687,12 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             temp=temp*0;
             for (i=0; i<rozFinishedTEMP.length; i++){
                 zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
+                console.log("zmienneX" + zmienneXFinished);
+                console.log("rozfinishedTemp" + rozFinishedTEMP);
                 if (parseFloat(rozFinishedTEMP[i]).toFixed(3)<=parseFloat(zmienneXFinished[k])){
                     temp=temp+1;
                 } else {
-                   rozFinished[k]=parseFloat(temp.toFixed(0));
+                    rozFinished[k]=parseFloat(temp.toFixed(0));
                     k=k+1;
                     i=i-1;
                     temp=0;
@@ -1722,9 +1723,9 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                      temp1=1;
                      k=-1;
                  }    
-	   } 
+	   }
         document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
-        while (rozFinished.length!=(podzialka+1)) { // liczba rozkładów = podzialce
+        while (rozFinished.length<=(podzialka+1)) { // liczba rozkładów = podzialce
             rozFinished.push(0);
         }
         rozFinishedTEMP=rozFinished.slice();
@@ -1770,7 +1771,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                                 i=100;
                             } else {
                                 if (k>maxDim && maxDim != podzialka) {
-                                    //alert("asdasd");
                                     temp2=(maxDim-k);
                                 }
                                 else temp2=temp2+1;
@@ -1784,7 +1784,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                                 i=100;
                             } else {
                                 if (i<minDim && minDim != 0) {
-                                    //alert("asdasd");
                                     temp=(i-minDim);
                                 }
                                 else temp=temp+1;
