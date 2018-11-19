@@ -288,7 +288,7 @@ function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
 	document.getElementById("container").style.visibility = "hidden";
     document.getElementById("container2").style.visibility = "hidden";
     if (document.getElementById("Zam_czesciowa").value=="checked"){
-        document.getElementById("RozWymiarow").innerHTML=" &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:";
+        document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:";
     } else {
         document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów dla wszystkich elementów:";
     }
@@ -455,7 +455,7 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
             Box = document.getElementById('devDown'+DimIndex[i]);
 			Box.disabled=true;
 			Box.style="left:"+Box.style.left+"; background-color: #00a80e";
-            document.getElementById("RozWymiarow").innerHTML=" &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:"
+            document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:"
             if (document.getElementById("dim"+DimIndex[i]).value!=""){
                 document.getElementById("dim"+DimIndex[i]).style.color='red';
                 document.getElementById("devUp"+DimIndex[i]).style.color='red';
@@ -551,7 +551,8 @@ function changeDOT(id){
 function validate(evt,id) {
 var theEvent = evt || window.event;
 var key = theEvent.keyCode || theEvent.which;
-    if (key!="8" && key!="37" && key!="39" ){
+    if (key=="39"){theEvent.returnValue = false;};
+    if (key!="8" && key!="37" && key!="39"){
             key = String.fromCharCode( key );
           if (id.substring(0,3)=="dim" | document.getElementById(id).value.length>0){
             var regex = /[0-9]|\.|\,/;
@@ -719,13 +720,14 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
         for (i=1; dimTemp!=""; i++)
             {
                 Temp1=i;
-                tempDevUp=document.getElementById("devUp"+DimIndex[Temp1]).value.replace(",",".")
-                tempDevDown=document.getElementById("devDown"+DimIndex[Temp1]).value.replace(",",".")
+                tempDevUp=document.getElementById("devUp"+DimIndex[Temp1]).value.replace(",",".");
+                tempDevDown=document.getElementById("devDown"+DimIndex[Temp1]).value.replace(",",".");
                 if (ChartScale > (tempDevUp - tempDevDown))
                     {
                         ChartScale=parseFloat(document.getElementById("devUp"+DimIndex[Temp1]).value.replace(",","."))-parseFloat(document.getElementById("devDown"+DimIndex[Temp1]).value.replace(",","."));
                     }
-                dimTemp=document.getElementById("dim"+DimIndex[Temp1+1]).value;
+                if (Temp1<6) dimTemp=document.getElementById("dim"+DimIndex[Temp1+1]).value;
+                else dimTemp="";
             }
     }
     delete tempDevDown;
@@ -830,8 +832,8 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
     var tempMax=0.0;
     var indexTab="";
     var CheckNext=0;
-    //var SUMROZKLADNORMALNY=0.0
-    //var SUMROZKLADNORMALNY1=0.0
+    var SUMROZKLADNORMALNY=0.0
+    var SUMROZKLADNORMALNY1=0.0
     //var SUMROZKLADNORMALNY2=0.0
     //var SUMROZKLADNORMALNY3=0.0
 		for(i=0; i<1.0*(podzialka+1); i++) { //obliczanie wartosci dla wszystkich rozkladow
@@ -844,8 +846,8 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 					rozNormAsym.push(temp/(sigmaNorm*Math.sqrt(2*Math.PI)));
 				}
 				//temp=Math.pow(Math.E,(-1*Math.pow((zmienneXTab[i]-MinDim),2)/(Math.pow(sigmaNorm,2)*2)));	//rozklad Rayleigha
-				temp=Math.pow(Math.E,(-1*Math.pow((zmienneXTab[i]-MinDim),2)/(Math.pow(sigmaNorm*1.2,2)*2)));	//rozklad Rayleigha
-				rozRayl.push(((zmienneXTab[i]-MinDim)*temp*0.7)/Math.pow(sigmaNorm,2)+0.0001);
+				temp=Math.pow(Math.E,(-1*Math.pow((zmienneXTab[i]-MinDim),2)/(Math.pow(sigmaNorm*1.5,2)*2)));	//rozklad Rayleigha
+				rozRayl.push(((zmienneXTab[i]-MinDim)*temp*0.44)/Math.pow(sigmaNorm,2)+0.0001);
 				//rozRayl.push(((zmienneXTab[i]-MinDim)*temp)/Math.pow(sigmaNorm,2)+0.0001);
              //SUMROZKLADNORMALNY1=SUMROZKLADNORMALNY1+rozRayl[i];
 				rozRaylPLUS.unshift(((zmienneXTab[i]-MinDim)*temp*0.7)/Math.pow(sigmaNorm,2)+0.0001);
@@ -901,6 +903,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 					} 
 					zmienneXTab[i]=parseFloat(zmienneXTab[i].toFixed(4));
 		}
+    //alert(SUMROZKLADNORMALNY + "  " + SUMROZKLADNORMALNY1);
 	DataIndex=[rozMinMax,rozNorm, rozRown, rozTroj, rozRaylPLUS, rozRayl, rozNormAsym];
 	if (Multiple !=0){	
 	for (j=0; j<7; j++) {
@@ -921,27 +924,21 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                         rozMinMax[podzialka]=((podzialka+1-temp)*(index_zmiany/podzialka).toFixed(0));
                         break;
 				case 0:
-					//rozNorm[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozNorm)),index_zmiany,index_ucinania_dołu));
                     rozNorm=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				case 1:
-					//rozRown[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozRown))*0.0001,(index_zmiany),index_ucinania_dołu));
 					rozRown=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				case 2:
-					//rozTroj[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozTroj)),index_zmiany,index_ucinania_dołu));
 					rozTroj=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				case 3:
-					//rozRaylPLUS[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozRaylPLUS)),index_zmiany,index_ucinania_dołu));
 					rozRaylPLUS=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				case 4:	
-                        //rozRayl[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozRayl)),index_zmiany,index_ucinania_dołu));
 					rozRayl=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				case 5:
-					//rozNormAsym[i]=(ActualDistr(DataIndex[j],i,(Math.max.apply(Math, rozNormAsym)),index_zmiany,index_ucinania_dołu));
                     rozNormAsym=MonteCarlo(DataIndex[j],zmienneXTab,index_zmiany);
                         break;
 				}	
@@ -995,9 +992,8 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
             }
         
         }
-        TemprozFinished=[]; 
+        TemprozFinished=[];
         if (rozFinished.length==0){// Tworzenie tabeli ze zmiennymi o wymiarach A
-            
             for (i=0; i<index_zmiany; i++) {
                     for(j=0; j<DataIndex[BTNlistpos][i]; j++){
                             //alert(zmienneXTab[i]);
@@ -1006,14 +1002,13 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                     }
             rozFinished=rozFinishedTEMP;
 		} else {	// Tworzenie tabeli ze zmiennymi o wymiarach sumy A+....itd.
-                //alert(DataIndex[BTNlistpos]);
 			    for (i=0; i<index_zmiany; i++) {
                         for(j=0; j<(DataIndex[BTNlistpos][i]); j++) {
                         TemprozFinished.push(parseFloat(zmienneXTab[i]));
                         }
                     }
                 for (i=0; i<index_zmiany; i++){
-                    if (BTNlistpos==0){
+                   /* if (BTNlistpos==0){ // rozklad MinMax - przycisk 0 (nieużywane)
                         if (i<index_zmiany/3){
                            temp=(Math.random()*((TemprozFinished.length-1)/2)).toFixed(0); 
                         }else if (i>index_zmiany/3 && i<2*(index_zmiany/3)){
@@ -1021,14 +1016,13 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                         } else{
                             temp=(Math.random()*((TemprozFinished.length-1)/3)+((2*(TemprozFinished.length-1))/3)).toFixed(0);   
                         }
-                    } else{
+                    } else */{
                         temp=(Math.random()*(TemprozFinished.length-1)).toFixed(0);
                         if (temp<0) temp=0;
                     }
-                    
                         if (isNaN (temp)){
-                                    alert("błąd0011 + "+i);
-                                }
+                            alert("błąd0011 + "+i);
+                        }
                         if(TemprozFinished[temp]<0){
                             alert("błąd0012 + "+temp);
                         }
@@ -1038,11 +1032,10 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
                             alert("błąd0013 + " +temp + " " + i);
                         }
                         TemprozFinished.splice(temp,1);
-                    
                     }
             }
-		temp=Math.max.apply(Math, rozFinished);	//Odejmowanie czesci wykresu w złożeniu
-		temp1=Math.min.apply(Math, rozFinished);
+		//temp=Math.max.apply(Math, rozFinished);	//Odejmowanie czesci wykresu w złożeniu
+		//temp1=Math.min.apply(Math, rozFinished);
 	}
 	var LabelIndex=["MinMax ","r. normalny ","r. równomierny ", "r. trójkątny ","r. Rayleigha - (skośność lewostronna) ","r. Rayleigha + (skośność prawostronna) ","r. norm. niesymetryczny"];
 	var ColorIndex=['rgba(0, 125, 105, 0.9)','rgba(0, 155, 205, 0.9)','rgba(250, 160, 5, 0.9)','rgba(0, 175, 0, 0.9)','rgba(0, 0, 255, 0.9)','rgba(90, 135, 25, 0.9)','rgba(150, 20, 20, 0.9)'];
@@ -1060,10 +1053,12 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
         MaxScale=(((Math.max.apply(Math, rozRayl)*1.1-(Math.max.apply(Math, rozRayl)*1.1))*0.35)+Math.max.apply(Math, rozRayl)*1.2);
     }*/
 	zakres=parseFloat(DevUp)-parseFloat(DevDown);
-    //alert(zakres/ChartScale);
-    //MaxScale=3.2/(ChartScale+(zakres/ChartScale)*0.01);
-    MaxScale=44/(10*ChartScale + (zakres/ChartScale)*0.03);
+    //MaxScale=33/(10*ChartScale + (zakres/ChartScale)*0.5);
+    MaxScale=(1/ChartScale)*3.95 - (0.3*((zakres/ChartScale)-1)*(1/ChartScale));
     var ColorIndex1=[];
+    let labelText;
+    if (Multiple==0) labelText = "(idealny)"
+    else labelText = ""
 	for (i=0; i<=80; i++){ //Lista kolorów słupków wykresu złożenia
 	ColorIndex1[i]=ColorIndex[BTNlistpos];
 	}
@@ -1103,7 +1098,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 		config.data = {
 			labels: zmienneXTab,
 			datasets: [{
-				label: LabelIndex[BTNlistpos],
+				label: LabelIndex[BTNlistpos] + labelText,
 				data: DataIndex[BTNlistpos],
 				backgroundColor:ColorIndex1,
 				borderColor:ColorIndex[BTNlistpos],
@@ -1160,7 +1155,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
         var canvas = document.getElementById("CharttHist"+(id.substr(0,1)));
         document.getElementById("ChartHist"+id.substr(0,1)+"Wym").innerHTML="Wymiar "+DimIndex[id.substr(0,1)];
         var ctx = canvas.getContext('2d'); 
-            config.options.legend.labels.fontSize=8;
+            config.options.legend.labels.fontSize=11;
             config.options.scales.xAxes[0].ticks.fontSize=9;
             config.options.scales.yAxes[0].ticks.display=true;
             config.options.scales.yAxes[0].ticks.fontSize=9;
@@ -1296,6 +1291,8 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
 		}
 	myChart = new Chart(ctxFinal,configFinal);
 	if (document.getElementById("Zam_czesciowa").value=="checked"){ // Red and yellow bars on total interchangeability chart
+       document.getElementById('minOrgDimDownDIV').style.visibility = "hidden";
+        document.getElementById('minOrgDimUpDIV').style.visibility = "hidden";
         for (i=0; i<dataX.length; i++) {
             let minOrgDim = (parseFloat(OrgDim)+parseFloat(OrgDevDown)).toFixed(3);
             let maxOrgDim = (parseFloat(OrgDim)+parseFloat(OrgDevUp)).toFixed(3);
@@ -1386,19 +1383,21 @@ function checkDev(id){
 }
 function MyAlert(text, box, timeText, timeBox, clear) {
     let tempColorStyle;
-    if (box.style.backgroundColor!="red") {
-        tempColorStyle=box.style.backgroundColor;
-    } else {
-        tempColorStyle="";
-    }
-    let tempZindexStyle=box.style.zIndex;
-    if (box!=null) {
+    let tempZindexStyle;
+    if (box!=null){
+        if (box.style.backgroundColor!="red") {
+            tempColorStyle=box.style.backgroundColor;
+        } else {
+            tempColorStyle="";
+        }
+        tempZindexStyle=box.style.zIndex;
         box.style.backgroundColor="red";
         box.style.zIndex=3;
     }
     document.getElementById("DevAlert").innerHTML=text;
     document.getElementById("DevAlert").style.backgroundColor="white";
     document.getElementById("GreyedScreen").style.zIndex=2;
+    document.getElementById("GreyedScreen").style.opacity=0.6;
     if (box!=null) {
         setTimeout(function() {
             box.style.backgroundColor=tempColorStyle;
@@ -1407,8 +1406,12 @@ function MyAlert(text, box, timeText, timeBox, clear) {
                 box.value=""; 
             }
             document.getElementById("GreyedScreen").style.zIndex=-2;
+            document.getElementById("GreyedScreen").style.opacity=0.0;
         }, timeBox);
-    } else document.getElementById("GreyedScreen").style.zIndex=-2;
+    } else {
+        document.getElementById("GreyedScreen").style.zIndex=-2;
+        document.getElementById("GreyedScreen").style.opacity=0.0;
+    }
     setTimeout(function() {
         document.getElementById("DevAlert").innerHTML=""
         document.getElementById("DevAlert").style.backgroundColor="";
@@ -1432,6 +1435,7 @@ function GetScheduledBtn() { //Sprawdzamy jaki rozkład wymiarów został wybran
 				}
 				if (j==6 && counter==0){
 					AlertButton(i);
+                    MyAlert("Najpierw wybierz rozkłady wymiarów niezależnych", null, 5000,500,0);
 					return 0
 				}
 			}
@@ -1517,7 +1521,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	var temp1=0.0;
 	var temp2=0.0;
 	var Xstart=0;
-    if (Param!=0) var ScheduleBtn=GetScheduledBtn();
+    if (Param!=0 && Param!=2) var ScheduleBtn=GetScheduledBtn();
     else ScheduleBtn=1;
 	if (ScheduleBtn==0) { return};
     MaxRange=0.0;
@@ -1529,11 +1533,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 		}
 	}
     if(document.getElementById("Zam_czesciowa").value=="checked" && Param==2){
-        
-        document.getElementById("DevAlert").innerHTML="Akcja niemożliwa przy wybranej zamienności częściowej"
-        setTimeout(function() {
-        }, 1500);
-        setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);
+        MyAlert("Akcja niemożliwa przy wybranej zamienności częściowej",null, 5000, 1500,0);
         return;
        }
 	for(i=1; i<7; i++) {
@@ -1608,16 +1608,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                 MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",Box,5000,1500,);
                 MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",BoxDown,5000,1500,);
                 MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",BoxUp,5000,1500,);
-                /*Box.style.backgroundColor="red";
-                BoxDown.style.backgroundColor="red";
-                BoxUp.style.backgroundColor="red";
-                document.getElementById("DevAlert").innerHTML="Wpisz wymiar zależny Z wraz z odchyłkami"
-                    setTimeout(function() {
-                Box.style.backgroundColor="#aaf7aa";
-                BoxDown.style.backgroundColor="#aaf7aa";
-                BoxUp.style.backgroundColor="#aaf7aa";
-                }, 1500);
-                    setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);*/
                 return;
             }
 		DevUp=document.getElementById("devUpZ").value.replace(",",".");
@@ -1649,16 +1639,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             MyAlert("Zmień dane. Zadanie nie do rozwiązania.",Box,5000,1500);
             MyAlert("Zmień dane. Zadanie nie do rozwiązania.",BoxDown,5000,1500);
             MyAlert("Zmień dane. Zadanie nie do rozwiązania.",BoxUp,5000,1500);
-            /*Box.style.backgroundColor="red";
-            BoxDown.style.backgroundColor="red";
-            BoxUp.style.backgroundColor="red";
-            document.getElementById("DevAlert").innerHTML="Zmień dane. Zadanie nie do rozwiązania."
-                setTimeout(function() {
-            Box.style.backgroundColor="#aaf7aa";
-            BoxDown.style.backgroundColor="#aaf7aa";
-            BoxUp.style.backgroundColor="#aaf7aa";
-            }, 1500);
-                setTimeout(function() {document.getElementById("DevAlert").innerHTML="" }, 5000);*/
             return;
             }
         }
@@ -1673,16 +1653,11 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                     if (index_zmiany==null) {
                         return;
                     }
-                    //for (j=0; j<1; j++) {	
                         if (index_zmiany>50000 || index_zmiany<100){
                             index_zmiany=prompt("Wpisz poprawną wartość\nIle losowań od 100 do 50 000", 1000);
                         } else { j=2; }
-                    //}
                     if (index_zmiany>50000 || index_zmiany<100){
                         return; }
-                    //index_zmiany=1000/(Math.sqrt(11*index_zmiany*index_zmiany/5)+200);
-                    
-                    //index_zmiany=(100000/(200*index_zmiany));
                 } else if (Param==0) {
                     index_zmiany=1;
                 }
@@ -1711,8 +1686,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             temp=temp*0;
             for (i=0; i<rozFinishedTEMP.length; i++){
                 zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
-                console.log("zmienneX" + zmienneXFinished);
-                console.log("rozfinishedTemp" + rozFinishedTEMP);
                 if (parseFloat(rozFinishedTEMP[i]).toFixed(3)<=parseFloat(zmienneXFinished[k])){
                     temp=temp+1;
                 } else {
@@ -1815,7 +1788,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                             }
                     }
                 }
-            //alert("temp= " + temp + "  temp2=  " + temp2);
             if (j==0){
                 document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
             } else if (j==1) {
@@ -1951,13 +1923,13 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 		if (document.getElementById("dim"+DimIndex[i+1]).value.replace(",",".")=="" || i==6){
 			Drawline((DimTemp+2),(i*45+40),(DimTemp+2),(i*45-i*85),"black",3);
 			if (OrgDim<0) {
-			Draw(DimTemp+2,0,(Xstart-DimTemp),30,"black",DimIndex[0]+"="+DimNew,Sign);
+			Draw(DimTemp+2,0,(Xstart-DimTemp),30,"black",DimIndex[0]+"="+DimNew,-1);
 			} else {
-			Draw(Xstart,0,(DimTemp-Xstart),30,"black",DimIndex[0]+"="+DimNew,Sign);
+			Draw(Xstart,0,(DimTemp-Xstart),30,"black",DimIndex[0]+"="+DimNew,1);
 			}
 		}
 	}
 }    
-document.getElementById("container").style.marginLeft = (-temp2+10)+"px";
-svg.setAttribute("width", (-temp2+10+10800));
+document.getElementById("container").style.marginLeft = (-temp2)+"px";
+svg.setAttribute("width", (-temp2+10755));
 }
