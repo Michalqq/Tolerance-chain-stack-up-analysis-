@@ -1378,7 +1378,28 @@ function checkDev(id){
             }
         }
     if (id.length>8) { //zamienność
-        tolBiggerCalc(id.substr(id.length-1,1));
+        let zamDev;
+        let check=1;
+        index=id.substring(6,8);
+        zamDev = parseFloat(document.getElementById(id).value.replace(",","."));
+        if (index=="Up") devUp = parseFloat(document.getElementById("dev" + index + id.substr(id.length-1,id.length)).value.replace(",","."));
+        else devUp = parseFloat(document.getElementById("dev" + index +"wn" + id.substr(id.length-1,id.length)).value.replace(",","."));
+        boxUp = document.getElementById(id);
+        switch (index) {
+            case "Up":
+                if (zamDev<devUp) {
+                    MyAlert("Nowa odchyłka górna nie może być mniejsza niż pierwotna odchyłka!",boxUp , 5000, 1500, 1);
+                    check= 0;
+                }
+                break;
+            case "Do":
+                if (zamDev>devUp){
+                    MyAlert("Nowa odchyłka dolna nie może być większa niż pierwotna odchyłka!",boxUp , 5000, 1500, 1);
+                    check = 0;
+                }
+                break;
+        }
+        if (check!=0) tolBiggerCalc(id.substr(id.length-1,1));
     }
 }
 function MyAlert(text, box, timeText, timeBox, clear) {
