@@ -280,6 +280,7 @@ img {
 			box-shadow: 4px 4px 15px grey;
 			position:absolute;
 			z-index:1;
+            background: radial-gradient(circle at 5px 5px, #51d451, #aaf7aa);
             }
 		input[class="Zam"]{
 			background-color: #aaf7aa;
