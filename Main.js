@@ -901,7 +901,7 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 							//rozTroj.push(2.2*temp);
 						}
 					} 
-					zmienneXTab[i]=parseFloat(zmienneXTab[i].toFixed(4));
+					zmienneXTab[i]=parseFloat(zmienneXTab[i].toFixed(6));
 		}
     //alert(SUMROZKLADNORMALNY + "  " + SUMROZKLADNORMALNY1);
 	DataIndex=[rozMinMax,rozNorm, rozRown, rozTroj, rozRaylPLUS, rozRayl, rozNormAsym];
@@ -1548,6 +1548,11 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
     MaxRange=0.0;
 	DeleteSVG();
 	for (i=1; i<7; i++) { // Który wymiar pusty (gdzie wpisać dodatkowy)
+        if (Param==2 && document.getElementById("dim"+DimIndex[i]).style.color=="blue"){
+                document.getElementById("devUp"+DimIndex[i]).value="";
+                document.getElementById("devDown"+DimIndex[i]).value="";
+                document.getElementById("dim"+DimIndex[i]).value="";
+             }
 		if (document.getElementById("dim"+DimIndex[i]).value.replace(",",".")==""){
 			var tempIndex=i;
 			i=8;
@@ -1663,6 +1668,15 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             return;
             }
         }
+        if (DevUpNew==0 && DevDownNew==0 && DimNew==0) {
+			document.getElementById('btn+'+DimIndex[tempIndex]).className="button button0";
+            document.getElementById('btn-'+DimIndex[tempIndex]).className="button button1";
+			document.getElementById("btn-"+DimIndex[tempIndex]).value=""
+			document.getElementById("btn+"+DimIndex[tempIndex]).value=""
+            return;
+        }
+        if (DevUpNew==0) DevUpNew="0,0";
+        if (DevDownNew==0) DevDownNew="0,0";
 	}
     if (Param!=2){
         for(k=0; k<ScheduleBtn.length; k++) {
@@ -1702,12 +1716,16 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 		}
 		document.getElementById("Zam_toler").innerHTML ="Tolerancja =<b>" + zakres.toFixed(3)+"</b>"+ " &nbsp &nbsp    Tolerancja większa o:<b>" + DimTemp+"%"+ "</b> &nbsp &nbsp      Poza przedziałem tolerancji:";
 		rozFinishedTEMP.sort(function(a, b){return a-b});
-        zakres=zakres/podzialka;
+        //console.log(rozFinishedTEMP);
+        zakres=zakres/(podzialka+0.1);
+        //alert(zakres);
             var k=0;
             temp=temp*0;
             for (i=0; i<rozFinishedTEMP.length; i++){
-                zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
-                if (parseFloat(rozFinishedTEMP[i]).toFixed(3)<=parseFloat(zmienneXFinished[k])){
+                 zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(6));
+                if (parseFloat(rozFinishedTEMP[i]).toFixed(6)<=parseFloat(zmienneXFinished[k])){
+               /* zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
+                if (parseFloat(rozFinishedTEMP[i]).toFixed(3)<=parseFloat(zmienneXFinished[k])){*/
                     temp=temp+1;
                 } else {
                     rozFinished[k]=parseFloat(temp.toFixed(0));
@@ -1716,6 +1734,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                     temp=0;
                 }
               }
+        CalculateSigma(rozFinished,zmienneXFinished);
         zmienneXFinished=[];
          for(k=0; k<(podzialka+1); k++) {
           zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
@@ -1758,7 +1777,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
            index += 1;
            if (index>10) clearInterval(interval)
            ;}, 20);
-        CalculateSigma(rozFinished,zmienneXFinished);
         document.getElementById("Zam_czesciowa").style.visibility = "visible";
         document.getElementById("ChartHistogramBtn").style.visibility = "visible";
 		document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML +"<b>"+ (parseFloat(Finished_OutOfRange)*100/parseFloat(Finished_Sum)).toFixed(2)+"%"+"</b>";
@@ -1878,7 +1896,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                 i=podzialka+1;
                 }
         }
-        for (i=rozFinished.length-1;i>0;i--){ //wykryty maksymalny wymiar
+        for (i=podzialka;i>0;i--){ //wykryty maksymalny wymiar
             if (rozFinished[i]>0){
                 document.getElementById("Parag_Max_wykryte").innerHTML ="Wykryty wym. Max: <b>"+zmienneXFinished[i].toFixed(3)+"</b>";
                 i=0;
