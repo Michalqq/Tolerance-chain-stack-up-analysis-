@@ -530,7 +530,7 @@ function AcceptBtnChart(id){
 		AddImage(DimId,ChartId);
 	}
 }
-function AddImage(id, chartID){
+function AddImage(id, chartID){ //MiniChart picture
 	var img = new Image();
 	var div = document.getElementById('MiniChart'+id);
 	var LabelIndex=["r.normalny","r.równomierny", "r.trójkątny","r.Rayleigha", "r.Rayleigha +","r.normalny Asym" ];
@@ -1516,6 +1516,31 @@ function tolBiggerCalc(dimIndex) {
         document.getElementById("tolBigger" + dimIndex).innerHTML = tolBigger + "%";
     }
     
+}
+function Dimensional_synthesis() { //Synteza wymiarowa
+    let dimIndex=["a", "A", "B", "C", "D", "E", "F"];
+	let dimSumCbrt=0;
+    let dim=0;
+    let sign=1;
+    let factor_k=0;
+	let devUp=document.getElementById("devUpZ").value.replace(",",".");
+	let devDown=document.getElementById("devDownZ").value.replace(",",".");
+    let tolerance = parseFloat(devUp) - parseFloat(devDown);
+    for(i=1; i<7; i++) {
+        let actualDim = document.getElementById("dim" + dimIndex[i]).value;
+        if (actualDim == "" || actualDim == null) break;
+        let btnMinusSign = document.getElementById("btn-"+dimIndex[i]).value;
+        let btnPlusSign = document.getElementById("btn+"+dimIndex[i]).value;
+        if (btnPlusSign != "checked" && btnMinusSign != "checked") {
+            PlusMinusClick('+'+dimIndex[i])
+            btnPlusSign = document.getElementById("btn+"+dimIndex[i]).value;
+        }
+        (btnPlusSign == "checked") ? sign=1 : sign=-1;
+        dimSumCbrt += Math.cbrt(parseFloat(actualDim));
+        dim += sign * actualDim;
+    }
+    factor_k = tolerance / dimSumCbrt;
+    alert(dimSumCbrt+ " - "+ dim + " -  " + factor_k);
 }
 function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	index_ucinania_dołu=0;
