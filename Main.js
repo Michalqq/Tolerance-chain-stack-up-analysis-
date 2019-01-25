@@ -1526,6 +1526,7 @@ function Dimensional_synthesis() { //Synteza wymiarowa
 	let devUp=document.getElementById("devUpZ").value.replace(",",".");
 	let devDown=document.getElementById("devDownZ").value.replace(",",".");
     let tolerance = parseFloat(devUp) - parseFloat(devDown);
+    let value=0;
     for(i=1; i<7; i++) {
         let actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
@@ -1540,7 +1541,13 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         dim += sign * actualDim;
     }
     factor_k = tolerance / dimSumCbrt;
-    alert(dimSumCbrt+ " - "+ dim + " -  " + factor_k);
+    for(i=1; i<7; i++) {
+        actualDim = document.getElementById("dim" + dimIndex[i]).value;
+        if (actualDim == "" || actualDim == null) break;
+        value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2
+        document.getElementById("devUp" + dimIndex[i]).value = "+" + value.toString().replace(".",",");
+        document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+    }
 }
 function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	index_ucinania_dołu=0;
