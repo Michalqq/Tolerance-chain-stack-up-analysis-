@@ -1573,6 +1573,7 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         if (value.toString().length>5) value = value.toFixed(5);
         document.getElementById("devUp" + dimIndex[i]).value = "+" + value.toString().replace(".",",");
         document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+        
     }
 }
 function getMaxRange(Param){ // (param 1,) obliczanie złożenia
