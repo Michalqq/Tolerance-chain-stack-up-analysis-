@@ -1518,7 +1518,7 @@ function tolBiggerCalc(dimIndex) {
     
 }
 function Dimensional_synthesis() { //Synteza wymiarowa
-    let dimIndex=["a", "A", "B", "C", "D", "E", "F"];
+    let dimIndex=["Z", "A", "B", "C", "D", "E", "F"];
 	let dimSumCbrt=0;
     let dim=0;
     let sign=1;
@@ -1526,10 +1526,28 @@ function Dimensional_synthesis() { //Synteza wymiarowa
 	let devUp=document.getElementById("devUpZ").value.replace(",",".");
 	let devDown=document.getElementById("devDownZ").value.replace(",",".");
     let tolerance = parseFloat(devUp) - parseFloat(devDown);
+    let index=0;
+    if (devUp=="" || devUp==null) index=1;
+    if (devDown=="" || devDown==null) index=1;
+    if (document.getElementById("dimZ").value=="" || document.getElementById("dimZ").value==null) index=1;
+    if (index==1) {
+		var BoxUp=document.getElementById("devUpZ");
+        var BoxDown=document.getElementById("devDownZ");
+        var Box=document.getElementById("dimZ");
+        MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",Box,5000,1500,);
+        MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",BoxDown,5000,1500,);
+        MyAlert("Wpisz wymiar zależny Z wraz z odchyłkami",BoxUp,5000,1500,);
+    }
     let value=0;
     for(i=1; i<7; i++) {
         let actualDim = document.getElementById("dim" + dimIndex[i]).value;
-        if (actualDim == "" || actualDim == null) break;
+        if (actualDim == "" || actualDim == null) {
+            if (i==1 && index==0) { //Brak wpisanych wymiarów niezależnych
+                Box = document.getElementById("dim" + dimIndex[i]);
+                MyAlert("Wpisz wymiary niezależne",Box,5000,1500,);
+            }
+            break;
+        }
         let btnMinusSign = document.getElementById("btn-"+dimIndex[i]).value;
         let btnPlusSign = document.getElementById("btn+"+dimIndex[i]).value;
         if (btnPlusSign != "checked" && btnMinusSign != "checked") {
@@ -1541,10 +1559,18 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         dim += sign * actualDim;
     }
     factor_k = tolerance / dimSumCbrt;
+    if (dim != document.getElementById("dimZ").value) {
+        for(i=0; i<7; i++) {
+            var Box=document.getElementById("dim" + dimIndex[i]);
+            MyAlert("Łańcuch wymiarowy jest błędny!",Box,5000,1500,);
+            break;
+        }
+    }
     for(i=1; i<7; i++) {
         actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
-        value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2
+        value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2;
+        if (value.toString().length>5) value = value.toFixed(5);
         document.getElementById("devUp" + dimIndex[i]).value = "+" + value.toString().replace(".",",");
         document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
     }
