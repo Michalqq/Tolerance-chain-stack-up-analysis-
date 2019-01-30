@@ -1352,6 +1352,8 @@ for (i=1;i<7;i++){
 }
 }
 function checkDev(id){
+    if (document.getElementById(id).value.length>3 && document.getElementById(id).value.length<7) document.getElementById(id).style.fontSize = "15px";
+    if (document.getElementById(id).value.length>5) document.getElementById(id).style.fontSize = "12px";
     var index="";
     var boxDown=0.0;
     var boxUp=0.0;
@@ -1570,13 +1572,18 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
         value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2;
-        if (value.toString().length>5) value = value.toFixed(5);
+        if (value.toString().length>5) {
+            value = value.toFixed(5);
+            document.getElementById("devUp" + dimIndex[i]).style.fontSize = "11px";
+            document.getElementById("devDown" + dimIndex[i]).style.fontSize = "11px";
+        }
         document.getElementById("devUp" + dimIndex[i]).value = "+" + value.toString().replace(".",",");
         document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
-        
+        //document.getElementById("devUp" + dimIndex[i]).className = "";
     }
+    getMaxRange(3);
 }
-function getMaxRange(Param){ // (param 1,) obliczanie złożenia
+function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obliczanie wymiaru niezależnego/ (Param==3) - Synteza wymiarowa
 	index_ucinania_dołu=0;
 	rozFinished=[];
 	rozNorm=[];
@@ -1601,7 +1608,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	var temp1=0.0;
 	var temp2=0.0;
 	var Xstart=0;
-    if (Param!=0 && Param!=2) var ScheduleBtn=GetScheduledBtn();
+    if (Param!=0 && Param!=2 && Param!=3) var ScheduleBtn=GetScheduledBtn();
     else ScheduleBtn=1;
 	if (ScheduleBtn==0) { return};
     MaxRange=0.0;
@@ -1660,9 +1667,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                 btnPlusSign.className="button button2";
                 btnMinusSign.className="button button3";
             }
-			if (document.getElementById("btn-"+DimIndex[i]).value=="checked") {
-				Sign=-1;
-			} // Obliczanie sumy wymiarów A-F z odchyłkami	
+			if (document.getElementById("btn-"+DimIndex[i]).value=="checked") Sign=-1; // Obliczanie sumy wymiarów A-F z odchyłkami	
                 DimNew=parseFloat(DimNew)+parseFloat(Dim)*Sign;
 			if (Sign==1) {
                 DevUpNew=parseFloat(DevUpNew)+parseFloat(DevUp)*Sign;
@@ -1737,7 +1742,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         if (DevUpNew==0) DevUpNew="0,0";
         if (DevDownNew==0) DevDownNew="0,0";
 	}
-    if (Param!=2){
+    if (Param!=2 && Param!=3){
         for(k=0; k<ScheduleBtn.length; k++) {
         var Dim=document.getElementById("dim"+DimIndex[ScheduleBtn[k].substring(0,1)]).value;
             if (Dim!=""){
@@ -1865,10 +1870,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                                 temp1=0.1;
                                 i=100;
                             } else {
-                                if (k>maxDim && maxDim != podzialka) {
-                                    temp2=(maxDim-k);
-                                }
-                                else temp2=temp2+1;
+                                (k>maxDim && maxDim != podzialka) ? temp2=(maxDim-k) : temp2=temp2+1;
                                 temp1=(temp1-parseFloat(rozFinished[k])).toFixed(1);
                             }
                             k=k-1;
@@ -1878,10 +1880,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
                                 temp1=0.1;
                                 i=100;
                             } else {
-                                if (i<minDim && minDim != 0) {
-                                    temp=(i-minDim);
-                                }
-                                else temp=temp+1;
+                                (i<minDim && minDim != 0) ? temp=(i-minDim) : temp=temp+1;
                                 temp1=(temp1-parseFloat(rozFinished[i])).toFixed(1);
                             }
                     }
@@ -1908,22 +1907,13 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 	}
     if (DevUpNew.length>10&& DevUpNew.substr(DevUpNew.length-1,1)==9){
         DevUpNew=parseFloat(DevUpNew)+0.0001;
-        if (DevUpNew>0){
-        DevUpNew= "+" + DevUpNew;
-        } else {
-            DevUpNew= "-" + DevUpNew;
-        }
+        (DevUpNew>0) ? DevUpNew= "+" + DevUpNew : DevUpNew= "-" + DevUpNew;
     }
     if (DevDownNew.length>10 && DevDownNew.substr(DevDownNew.length-1,1)==9){
         DevDownNew=parseFloat(DevDownNew)+0.0001;
-        if (DevDownNew>0){
-        DevDownNew= "+" + DevDownNew;
-        } else {
-            DevDownNew= "-" + DevDownNew;
-        }
+        (DevDownNew>0) ? DevDownNew= "+" + DevDownNew : DevDownNew= "-" + DevDownNew;
     }
-    
-	if (Param!=-1){
+	if (Param!=-1 && Param!=3){
 		if (document.getElementById("Zam_czesciowa").value!="checked"){ //Wymiary przed zamiennością
             OrgDim=DimNew;
 			OrgDevUp=DevUpNew.toString().substr(0,6);
@@ -1944,9 +1934,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
         //MaxRange=parseFloat(DevUpNew)-parseFloat(DevDownNew); //Wpisywanie informacji w boksy
         var sigmaNorm=0.0;
         sigmaNorm=(MaxRange/(2*Math.sqrt(3*Math.PI))).toFixed(3);
-        if (OrgDim==""){
-            OrgDim=document.getElementById("dimZ").value.replace(",",".");
-        }
+        if (OrgDim=="") OrgDim=document.getElementById("dimZ").value.replace(",",".");
+        
         document.getElementById("Parag_Max").innerHTML ="Wymiar Max: <b>"+(parseFloat(OrgDim)+parseFloat(DevUpNew))+"</b>";
         document.getElementById("Parag_Min").innerHTML ="Wymiar Min: <b>"+(parseFloat(OrgDim)+parseFloat(DevDownNew))+"</b>";
         for (i=0; i<podzialka; i++){ //wykryty minimalny wymiar
@@ -2001,12 +1990,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
 			Sign=-1;
 			color='#CC0000';
 		}
-		if (Sign==-1) { // Wymiar ujemny
-			DimTemp=DimTemp-(temp*scale);
-		}
-		if (DimTemp<temp2){
-			temp2=DimTemp;
-		}
+		if (Sign==-1) DimTemp=DimTemp-(temp*scale); // Wymiary ujemny
+		if (DimTemp<temp2) temp2=DimTemp;
 		Draw(DimTemp,(i*45),temp*scale,40,color,DimIndex[i]+"="+temp,Sign);
 		if (i==1 && Sign==1) {
 			Drawline(DimTemp+2,(i*45+40),DimTemp+2,(i*45-85),"black",3);
@@ -2015,9 +2000,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia
             Xstart=(DimTemp+2)+temp*scale;
             Drawline(Xstart,(i*45+40),Xstart,(i*45-85),"black",3);
         }
-		if (Sign==1) { // Wymiar dodatni
-			DimTemp=DimTemp+temp*scale*Sign;
-		} 
+		if (Sign==1) DimTemp=DimTemp+temp*scale*Sign;
 		if (document.getElementById("dim"+DimIndex[i+1]).value.replace(",",".")=="" || i==6){
 			Drawline((DimTemp+2),(i*45+40),(DimTemp+2),(i*45-i*85),"black",3);
 			if (OrgDim<0) {
