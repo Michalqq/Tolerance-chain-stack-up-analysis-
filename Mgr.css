@@ -24,6 +24,10 @@ body {
     transform: scale(1.3);
     font: 550 10px/1 'Gill Sans', sans-serif;
     background: #eee;
+    background-image: url("Background.jpg");
+    background-position: center;
+    background-repeat: repeat-y;
+    background-size: cover;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
