@@ -750,16 +750,12 @@ function Licz(id,Multiple=0,index_ucinania_dołu=0){ //Rozkład rzeczywisty w za
 		return;
 	} else {
         if (DevUp==""){
-            document.getElementById("devUp"+DimIndex[id.substring(0,1)]).style.backgroundColor="red";
-                setTimeout(function() {
-             document.getElementById("devUp"+DimIndex[id.substring(0,1)]).style.backgroundColor="#aaf7aa";
-            }, 1500); 
-             return;}
+            var Box=document.getElementById("devUp"+DimIndex[id.substring(0,1)]);
+            MyAlert("Wpisz wartość odchyłki górnej",Box,5000,1500,);
+            return;}
         if (DevDown==""){
-            document.getElementById("devDown"+DimIndex[id.substring(0,1)]).style.backgroundColor="red";
-                setTimeout(function() {
-            document.getElementById("devDown"+DimIndex[id.substring(0,1)]).style.backgroundColor="#aaf7aa"; 
-            }, 1500); 
+            var Box=document.getElementById("devUp"+DimIndex[id.substring(0,1)]);
+            MyAlert("Wpisz wartość odchyłki górnej",Box,5000,1500,);
             return;}
     }
 	if (DevDown==0 && DevUp==0){
@@ -1484,10 +1480,6 @@ function MonteCarlo (dataY,dataX,index){
             i++;
         }
     }
-    /*temp=0;
-    for (i=0;i<dataYTEMP.length;i++){
-        temp=temp+dataYTEMP[i];
-    }*/
     return dataYTEMP;
 }
 function tolBiggerCalc(dimIndex) {
@@ -1504,12 +1496,10 @@ function tolBiggerCalc(dimIndex) {
     devDown = document.getElementById("devDown"+dimIndex).value.replace(",",".");
     if (devUp!="" && devDown!=""){
         element = document.getElementById("ZamdevUp"+dimIndex);
-        if (element != null) zamDevUp = element.value.replace(",",".");
-        else zamDevUp=devUp;
+        (element != null) ? zamDevUp = element.value.replace(",",".") : zamDevUp=devUp;
         if (zamDevUp=="") zamDevUp=devUp;
         element = document.getElementById("ZamdevDown"+dimIndex);
-        if (element != null) zamDevDown = element.value.replace(",",".");
-        else zamDevDown=devDown;
+        (element != null) ? zamDevDown = element.value.replace(",",".") : zamDevDown=devDown;
         if (zamDevDown=="") zamDevDown=devDown;
         zakresOld=(parseFloat(devUp)-parseFloat(devDown));
         zakresNew=(parseFloat(zamDevUp)-parseFloat(zamDevDown));
@@ -1561,14 +1551,14 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         dim += sign * actualDim;
     }
     factor_k = tolerance / dimSumCbrt;
-    if (dim != document.getElementById("dimZ").value) {
+    if (dim != document.getElementById("dimZ").value) { // Czy łańcuch wym. poprawny? L=P
         for(i=0; i<7; i++) {
             var Box=document.getElementById("dim" + dimIndex[i]);
             MyAlert("Łańcuch wymiarowy jest błędny!",Box,5000,1500,);
-            break;
+            if (i==6) return;
         }
     }
-    for(i=1; i<7; i++) {
+    for(i=1; i<7; i++) { // wpisywanie odchyłek
         actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
         value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2;
@@ -1584,7 +1574,7 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         } else {
             document.getElementById("devUp" + dimIndex[i]).value = "+"  + value.toString().replace(".",",");
             document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
-            if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane wg. równania łańcucha
+            if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane są wg. równania łańcucha
                 document.getElementById("devUp" + dimIndex[i]).value = "";
                 document.getElementById("devDown" + dimIndex[i]).value = "";
                 document.getElementById("dim" + dimIndex[i]).value = "";
@@ -1594,10 +1584,8 @@ function Dimensional_synthesis() { //Synteza wymiarowa
                 document.getElementById("dim"+temp).style.color='black';
                 document.getElementById("devUp"+temp).style.color='black';
                 document.getElementById("devDown"+temp).style.color='black';
-                
             }
         }
-        //document.getElementById("devUp" + dimIndex[i]).className = "";
     }
     getMaxRange(3);
 }
@@ -1661,16 +1649,12 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 		}
         if (Dim!="") {
             if (DevUp==""){
-                 document.getElementById("devUp"+DimIndex[i]).style.backgroundColor="red";
-                    setTimeout(function() {
-                document.getElementById("devUp"+DimIndex[i]).style.backgroundColor="#aaf7aa";
-                }, 1500); 
+                var Box=document.getElementById("devUp"+DimIndex[i]);
+                MyAlert("Wpisz wartość odchyłki górnej",Box,5000,1500,);
                 return;}
             if (DevDown==""){
-                 document.getElementById("devDown"+DimIndex[i]).style.backgroundColor="red";
-                    setTimeout(function() {
-                document.getElementById("devDown"+DimIndex[i]).style.backgroundColor="#aaf7aa"; 
-                }, 1500); 
+                var Box=document.getElementById("devDown"+DimIndex[i]);
+                MyAlert("Wpisz wartość odchyłki dolnej",Box,5000,1500,); 
                 return;}
         }
 		if (parseFloat(DevUp)<parseFloat(DevDown)){
@@ -1738,10 +1722,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 			DevUpNew=(parseFloat(DevUp)-parseFloat(DevUpNew)).toFixed(3);
 			DevDownNew=DimTemp.toFixed(3);
         }
-		if (DevUpNew>0){
-		DevUpNew="+"+DevUpNew; }
-		if (DevDownNew>0){
-		DevDownNew="+"+DevDownNew;}
+		if (DevUpNew>0) DevUpNew="+"+DevUpNew; 
+		if (DevDownNew>0) DevDownNew="+"+DevDownNew;
         if (parseFloat(DevDownNew)>parseFloat(DevUpNew)){
         {
             MyAlert("Zmień dane. Zadanie nie do rozwiązania.",Box,5000,1500);
@@ -1765,16 +1747,11 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
         var Dim=document.getElementById("dim"+DimIndex[ScheduleBtn[k].substring(0,1)]).value;
             if (Dim!=""){
                 if (k==0 && Param!=0) {
-                index_zmiany=prompt("Ile losowań od 100 do 50 000", 1000);
-                index_losowan=index_zmiany;
-                    if (index_zmiany==null) {
-                        return;
-                    }
-                        if (index_zmiany>50000 || index_zmiany<100){
-                            index_zmiany=prompt("Wpisz poprawną wartość\nIle losowań od 100 do 50 000", 1000);
-                        } else { j=2; }
-                    if (index_zmiany>50000 || index_zmiany<100){
-                        return; }
+                    index_zmiany=prompt("Ile losowań od 100 do 50 000", 1000);
+                    index_losowan=index_zmiany;
+                    if (index_zmiany==null) return;
+                    (index_zmiany>50000 || index_zmiany<100) ? index_zmiany=prompt("Wpisz poprawną wartość\nIle losowań od 100 do 50 000", 1000) : j=2; 
+                    if (index_zmiany>50000 || index_zmiany<100) return; 
                 } else if (Param==0) {
                     index_zmiany=1;
                 }
@@ -1788,9 +1765,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 	if (Param==1){
         rozFinished=[];
         var text="Rozkład wymiaru zależnego (zamienność 100%)";
-		if (document.getElementById("Zam_czesciowa").value=="checked"){  
-            text="Rozkład wymiaru zależnego (zamienność częściowa)";
-        }
+		if (document.getElementById("Zam_czesciowa").value=="checked") text="Rozkład wymiaru zależnego (zamienność częściowa)";
         DimTemp=0;
 		zakres=parseFloat(DevUpNew)-parseFloat(DevDownNew);
 		if (OrgDevUp!=""){
@@ -1798,37 +1773,33 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 		}
 		document.getElementById("Zam_toler").innerHTML ="Tolerancja =<b>" + zakres.toFixed(3)+"</b>"+ " &nbsp &nbsp    Tolerancja większa o:<b>" + DimTemp+"%"+ "</b> &nbsp &nbsp      Poza przedziałem tolerancji:";
 		rozFinishedTEMP.sort(function(a, b){return a-b});
-        //console.log(rozFinishedTEMP);
         zakres=zakres/(podzialka+0.1);
-        //alert(zakres);
-            var k=0;
-            temp=temp*0;
-            for (i=0; i<rozFinishedTEMP.length; i++){
-                 zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(6));
-                if (parseFloat(rozFinishedTEMP[i]).toFixed(6)<=parseFloat(zmienneXFinished[k])){
-               /* zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
-                if (parseFloat(rozFinishedTEMP[i]).toFixed(3)<=parseFloat(zmienneXFinished[k])){*/
-                    temp=temp+1;
-                } else {
-                    rozFinished[k]=parseFloat(temp.toFixed(0));
-                    k=k+1;
-                    i=i-1;
-                    temp=0;
-                }
-              }
+        var k=0;
+        temp=temp*0;
+        for (i=0; i<rozFinishedTEMP.length; i++){
+            zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(6));
+            if (parseFloat(rozFinishedTEMP[i]).toFixed(6)<=parseFloat(zmienneXFinished[k])) {
+            temp=temp+1;
+            } else {
+            rozFinished[k]=parseFloat(temp.toFixed(0));
+            k=k+1;
+            i=i-1;
+            temp=0;
+            }
+        }
         CalculateSigma(rozFinished,zmienneXFinished);
         zmienneXFinished=[];
-         for(k=0; k<(podzialka+1); k++) {
-          zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
-             if (rozFinished[k]!=null){
-                 if (rozFinished[k]==0 && temp1==0){ // sprawdzanie od lewej strony jaki zakres tolerancji jest wykorzystany
-                     temp2=k+1;
-                 } else if (rozFinished[k]!=0 && temp1==0) {
-                     temp1=1;
-                 }
-		      Finished_Sum=parseFloat(Finished_Sum)+parseFloat(rozFinished[k]);
-             }
-	   } 
+        for(k=0; k<(podzialka+1); k++) {
+        zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(3));
+            if (rozFinished[k]!=null){
+                if (rozFinished[k]==0 && temp1==0){ // sprawdzanie od lewej strony jaki zakres tolerancji jest wykorzystany
+                 temp2=k+1;
+                } else if (rozFinished[k]!=0 && temp1==0) {
+                 temp1=1;
+                }
+            Finished_Sum=parseFloat(Finished_Sum)+parseFloat(rozFinished[k]);
+            }
+        } 
         if (Finished_Sum<index_zmiany){
             rozFinished[rozFinished.length]=parseFloat(index_zmiany-Finished_Sum);
             Finished_Sum=index_zmiany;
@@ -1842,7 +1813,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
                      temp1=1;
                      k=-1;
                  }    
-	   }
+        }
         document.getElementById("Compare_All").innerHTML ="100% obserwacji:&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
         while (rozFinished.length<=(podzialka+1)) { // liczba rozkładów = podzialce
             rozFinished.push(0);
@@ -1880,29 +1851,28 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
             } else {
                 temp1=0;
             }
-                for (i=0; i<(podzialka+1) ; i++){ 
-                    if (isNaN(rozFinished[k])) rozFinished[k]=0;
-                    if (isNaN(rozFinished[i])) rozFinished[i]=0;
-                    if (parseFloat(rozFinished[k])<parseFloat(rozFinished[i])){ // prawa strona 
-                            if (temp1<rozFinished[k]){ 
-                                temp1=0.1;
-                                i=100;
-                            } else {
-                                (k>maxDim && maxDim != podzialka) ? temp2=(maxDim-k) : temp2=temp2+1;
-                                temp1=(temp1-parseFloat(rozFinished[k])).toFixed(1);
-                            }
-                            k=k-1;
-                    }
-                    else { // lewa strona 
-                            if(temp1<rozFinished[i]){ 
-                                temp1=0.1;
-                                i=100;
-                            } else {
-                                (i<minDim && minDim != 0) ? temp=(i-minDim) : temp=temp+1;
-                                temp1=(temp1-parseFloat(rozFinished[i])).toFixed(1);
-                            }
-                    }
+            for (i=0; i<(podzialka+1) ; i++){ 
+                if (isNaN(rozFinished[k])) rozFinished[k]=0;
+                if (isNaN(rozFinished[i])) rozFinished[i]=0;
+                if (parseFloat(rozFinished[k])<parseFloat(rozFinished[i])){ // prawa strona 
+                        if (temp1<rozFinished[k]){ 
+                            temp1=0.1;
+                            i=100;
+                        } else {
+                            (k>maxDim && maxDim != podzialka) ? temp2=(maxDim-k) : temp2=temp2+1;
+                            temp1=(temp1-parseFloat(rozFinished[k])).toFixed(1);
+                        }
+                        k=k-1;
+                } else { // lewa strona 
+                        if(temp1<rozFinished[i]){ 
+                            temp1=0.1;
+                            i=100;
+                        } else {
+                            (i<minDim && minDim != 0) ? temp=(i-minDim) : temp=temp+1;
+                            temp1=(temp1-parseFloat(rozFinished[i])).toFixed(1);
+                        }
                 }
+            }
             if (j==0){
                 document.getElementById("Compare_09973").innerHTML ="99,73% obserwacji (3σ): &nbsp &nbsp <b>"+(100-(temp+temp2)*2.083333333).toFixed(2)+"%</b>";
             } else if (j==1) {
