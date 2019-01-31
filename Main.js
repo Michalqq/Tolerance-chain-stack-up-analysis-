@@ -1572,13 +1572,31 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
         value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2;
-        if (value.toString().length>5) {
-            value = value.toFixed(5);
+        if (i==1) value = value * 2;
+        if (value.toString().length>3) {
+            value = value.toFixed(3);
             document.getElementById("devUp" + dimIndex[i]).style.fontSize = "11px";
             document.getElementById("devDown" + dimIndex[i]).style.fontSize = "11px";
         }
-        document.getElementById("devUp" + dimIndex[i]).value = "+" + value.toString().replace(".",",");
-        document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+        if (i==1) { //pierwszy wymiar tolerowany wgłąb materiału
+            document.getElementById("devUp" + dimIndex[i]).value = "+0,0";
+            document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+        } else {
+            document.getElementById("devUp" + dimIndex[i]).value = "+"  + value.toString().replace(".",",");
+            document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+            if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane wg. równania łańcucha
+                document.getElementById("devUp" + dimIndex[i]).value = "";
+                document.getElementById("devDown" + dimIndex[i]).value = "";
+                document.getElementById("dim" + dimIndex[i]).value = "";
+                var temp = dimIndex[i];
+                getMaxRange(2);
+                AcceptRozkladDiv(1);
+                document.getElementById("dim"+temp).style.color='black';
+                document.getElementById("devUp"+temp).style.color='black';
+                document.getElementById("devDown"+temp).style.color='black';
+                
+            }
+        }
         //document.getElementById("devUp" + dimIndex[i]).className = "";
     }
     getMaxRange(3);
