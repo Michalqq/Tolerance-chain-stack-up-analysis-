@@ -24,7 +24,7 @@ body {
     transform: scale(1.3);
     font: 550 10px/1 'Gill Sans', sans-serif;
     background: #eee;
-    background-image: url("Background.jpg");
+    background-image: url("image/Background.jpg");
     background-position: center;
     background-repeat: repeat-y;
     background-size: cover;
@@ -47,6 +47,8 @@ p4 {
     color:blue; 
     font-size: 12px;
     padding: 2px;
+    background-color: white;
+    opacity: 0.7;
 }
 .BtnSchedule {
 	position:absolute;
@@ -277,24 +279,27 @@ img {
 			}
 		input[class="box"]{
 			background-color: #aaf7aa;
-		    border: 1px ridge darkgreen;
+		    border: 1px ridge black;
             border-radius: 5px;
 		    font: 700 12px/1 'Gill Sans', sans-serif;
 			text-align: center;
-			box-shadow: 4px 4px 15px grey;
+			box-shadow: 5px 3px 15px grey;
 			position:absolute;
 			z-index:1;
+            outline: none;
+            
             }
 		input[class="Zam"]{
 			background-color: #aaf7aa;
-		    border: 1px ridge darkgreen;
+		    border: 1px ridge black;
             border-radius: 5px;
 		    font: 700 12px/1 'Gill Sans', sans-serif;
 			text-align: center;
-			box-shadow: 4px 4px 15px grey;
+			box-shadow: 5px 3px 15px grey;
 			position:absolute;
-			z-index:0;
+			z-index:1;
             display: none;
+            outline: none;
 			}
 		input[type1="Dim"]{
 		    width: 55px; 
@@ -356,41 +361,48 @@ img {
 		.button1 {
 			background-color: white; 
 			color: black; 
-			border: 1px solid #4CAF50;
+			border: 1px solid green;
             top:135px;
+			box-shadow: 0px 0px 20px white;
 			}
         .button1:hover {
 			background-color: #4CAF50;
 			color: white;
+			box-shadow: 0px 0px 15px black;
 			}
         .button0 {
 			background-color: white; 
 			color: black; 
-			border: 1px solid #4CAF50;
+			border: 1px solid green;
             top:105px;
+			box-shadow: 0px 0px 20px white;
 			}
         .button0:hover {
 			background-color: #4CAF50;
 			color: white;
+			box-shadow: 0px 0px 15px black;
 			}
 		
 		.button2 {
 			background-color: green; 
 			color: white; 
-			border: 1px solid #4CAF50;
+			border: 1px solid green;
             top:120px;
+			box-shadow: 0px 0px 20px white;
 			}
         .button3 {
 			color: white; 
             z-index: -1;
 			border: 1px solid #4CAF50;
             top:120px;
+			box-shadow: 0px 0px 20px white;
 			}
 		.buttonAllCheck {
 			width: 123px;
 			position:absolute;
 			top: 10px;
 			left: 8px;
+            outline: none;
 		}
         input[type="file"] {
 			opacity: 0;
