@@ -23,6 +23,7 @@ head, body {
 body {
     transform: scale(1.3);
     font: 550 10px/1 'Gill Sans', sans-serif;
+    font-size:10px;
     background: #eee;
     background-image: url("image/Background.jpg");
     background-position: center;
@@ -131,6 +132,7 @@ p4 {
   border-radius: 8px;
   box-shadow: inset 0 -1px 0 1px rgba(0, 0, 0, 0.2), inset 0 -10px 20px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+    outline: none;
 }
 .btn.sec {
   z-index:1;
@@ -424,7 +426,8 @@ ul1 {
     background-color: #737373;
     position: fixed;
     top: 0;
-    width: 100%;
+    width: 105%;
+    background-image: linear-gradient(#737373, #999999);
 }
 
 li1 {
