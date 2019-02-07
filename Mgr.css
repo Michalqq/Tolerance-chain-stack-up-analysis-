@@ -50,6 +50,7 @@ p4 {
     padding: 2px;
     background-color: white;
     opacity: 0.7;
+    z-index: 1;
 }
 .BtnSchedule {
 	position:absolute;
@@ -135,7 +136,7 @@ p4 {
     outline: none;
 }
 .btn.sec {
-  z-index:1;
+  z-index:0;
   color: #111;
   background: #fff;
 }
@@ -259,6 +260,7 @@ img {
 	height:40px; 
 	width:40px;
 	position:absolute;
+    box-shadow: 0px 0px 10px black;
 }
 .tolBigger{
     background-color:yellow;
@@ -281,7 +283,7 @@ img {
 			}
 		input[class="box"]{
 			background-color: #aaf7aa;
-		    border: 1px ridge black;
+		    border: 1px solid black;
             border-radius: 5px;
 		    font: 700 12px/1 'Gill Sans', sans-serif;
 			text-align: center;
@@ -370,7 +372,7 @@ img {
         .button1:hover {
 			background-color: #4CAF50;
 			color: white;
-			box-shadow: 0px 0px 15px black;
+			box-shadow: 0px 0px 15px grey;
 			}
         .button0 {
 			background-color: white; 
@@ -382,7 +384,7 @@ img {
         .button0:hover {
 			background-color: #4CAF50;
 			color: white;
-			box-shadow: 0px 0px 15px black;
+			box-shadow: 0px 0px 15px grey;
 			}
 		
 		.button2 {
@@ -426,8 +428,8 @@ ul1 {
     background-color: #737373;
     position: fixed;
     top: 0;
-    width: 105%;
-    background-image: linear-gradient(#737373, #999999);
+    width: 100%;
+    background-image: linear-gradient(#737373 80%, #999999 );
 }
 
 li1 {

@@ -199,21 +199,20 @@ Kontakt:  kraciukmichal@gmail.com-->
 
 <!-- zwijać -->
 <div class="BtnOblicz" style=" border:solid grey;">
-	<p style="margin-left:10px;margin-top:1px;font: 600 11px/1 'Arial', arial;color:blue">Oblicz:</p>
+	<p style="background-color: white; opacity: 0.7; margin-left:10px;margin-top:1px;font: 600 11px/1 'Arial', arial;color:blue">Oblicz:</p>
 </div>
 <div class="BtnDane" style=" border:solid grey;">
 	<p style="margin-left:10px;margin-top:1px;font: 600 11px/1 'Arial', arial;color:blue">Dane:</p>
 </div>
 <div class="BtnOdswiez" style=" border:solid grey;">
 </div>
-<div id="container" style="margin-top:235px; position:absolute; visibility:hidden; background-color:#eee; z-index:3" ></div>
-<div id="container2" style="margin-top:215px;width: 750px;height: 700px; position:absolute; visibility:hidden; background-color:azure; z-index:3; border-radius: 20px;box-shadow: inset 0 1px 0 0px rgba(0, 0, 0, 0.2), inset 0 8px 10px rgba(0, 0, 0, 0.2);" >
+<div id="container" style="margin-top:215px; position:absolute; visibility:hidden; background-color:#eee; z-index:1" ></div>
+<div id="container2" style="margin-top:215px;width: 750px;height: 700px; position:absolute; visibility:hidden; background-color:azure; opacity: 0.95; z-index:3; border-radius: 20px;box-shadow: inset 0 1px 0 0px rgba(0, 0, 0, 0.2), inset 0 8px 10px rgba(0, 0, 0, 0.2);" >
 	<img src="image/logoSIMR.jpg" alt="Logo Politechnika Warszawska" style="position: absolute;opacity: 0.95; z-index: 3; margin-left: 625px; margin-top: 15px; border-radius: 15px" width="120" height="120">
     <p id="Description" style="margin-left:25px;margin-top:15px;font: 13px/1 'Arial', arial"><b>Politechnika Warszawska</b>, wydział Samochodów i Maszyn Roboczych<br><br>Strona została zbudowana w ramach pracy magisterskiej pt. <br><i><b>"Aplikacja do modelowania analizy i syntezy wymiarowej"</b></i><br> <br><br> Autor: &nbsp&nbsp<b>Michał Kraciuk</b> <br><br> Promotor pracy: <b>Dr inż. Zbigniew Humienny</b><br><br> WARSZAWA, 2018<br>Wersja 1.0 - 06.11.2018&nbsp&nbsp Kontakt:  <i>  kraciukmichal@gmail.com</i>    
 </div>
-<div class="BtnSchedule" style="background-color:white; opacity:0.92; width:605px; height:210px; border: solid; border-radius: 10px;" >
+<div class="BtnSchedule" style="background-color: white; opacity: 0.9; width:605px; height:210px; border: solid; border-radius: 10px;" >
   <div class='BtnLeft1' >
-   
     <a id="BtnChart1.1" class='left1 btn sec' style="top:5px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. normalny</a>
     <a id="BtnChart1.2" class='left1 btn sec'style="top:29px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. równomierny</a>
     <a id="BtnChart1.3" class='left1 btn sec'style="top:53px" onmouseout="" onmouseover="" onclick="AcceptBtnChart(id)">r. trójkątny</a>
@@ -313,6 +312,7 @@ Kontakt:  kraciukmichal@gmail.com-->
 </div>
 <!-- zwijać -->
 <div class="Boxes">
+
 <input id="dimZ" type="tel" class="box" style="left: 5px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="Z" type1="Dim"><br>
 <input id="dimA" type="tel" class="box" style="left: 139px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="A" type1="Dim"><br>
 <input id="dimB" type="tel" class="box" style="left: 242px" onkeypress="validate(event,id)" onkeyup="changeDOT(id)" placeholder="B" type1="Dim"><br>
@@ -367,7 +367,7 @@ Kontakt:  kraciukmichal@gmail.com-->
 <button id="Oblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(0); AcceptRozkladDiv(1)" style="top:250px; padding-bottom: 2px; padding-top: 2px;"><b>Znajdź wymiar Z<br> metodą MinMax</b></button>
 <button id="RozkladOblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(1)" style="top:278px"><b>Rozkład wymiaru zależnego</b></button>
 <button id="ObliczDodatkowy" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:311px; padding-bottom: 2px; padding-top: 2px;"><b>Znajdź wymiar niezależny</b></button>
-<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:338px; padding-bottom: 2px; padding-top: 2px;"><b>Oblicz odchyłki wym. niezależnych</b></button>
+<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="Dimensional_synthesis()" style="top:338px; padding-bottom: 2px; padding-top: 2px;"><b>Oblicz odchyłki wym. niezależnych</b></button>
 <button id="Save-btn" class="buttonAllCheck btn sec" onclick="SaveToFile()" style="top:380px"><b>Zapisz wyniki</b></button>
 <button id="Zam_czesciowa" class="btn sec" onclick="AcceptBtnZamiennosc(id)" style="top:472px; left:150px; visibility:hidden; width:80px"><b>Zamienność częściowa</b></button>
 <div id="ZamiennoscDiv" class="Zamiennosc" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
@@ -418,17 +418,17 @@ Kontakt:  kraciukmichal@gmail.com-->
 </div>
 <div id="menu1" style="position:absolute; left:10px; top:25px; height:200px; width:300px; background-color:rgba(255, 255, 255, 1); z-index:0; display:none">
 </div>
-<div id="MiniChart1" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)" style="left:138px">
+<div id="MiniChart1" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)" style="left:138px; visibility: hidden">
 </div>
-<div id="MiniChart2" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:240px">
+<div id="MiniChart2" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:240px; visibility: hidden">
 </div>
-<div id="MiniChart3" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:342px">
+<div id="MiniChart3" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:342px; visibility: hidden">
 </div>
-<div id="MiniChart4" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:444px">
+<div id="MiniChart4" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:444px; visibility: hidden">
 </div>
-<div id="MiniChart5" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:546px">
+<div id="MiniChart5" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:546px; visibility: hidden">
 </div>
-<div id="MiniChart6" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:648px">
+<div id="MiniChart6" class="MiniChart" onmouseout="HideShowMaxChart(id)" onmouseover="HideShowMaxChart(id)" onclick="BlockChart(id)"  style="left:648px; visibility: hidden">
 </div>
 </form>
 <script>

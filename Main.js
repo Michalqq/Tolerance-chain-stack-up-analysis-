@@ -41,41 +41,42 @@ function HideShowChartHist(){
  
 }
 function Draw(X,Y,Width,Height,colorRGB,Text,Direction) {	//Rysowanie prostokątów do łańcucha wymiarowego + strzałki
-var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-rect.setAttribute("fill",colorRGB);
-rect.setAttribute("x", X);
-rect.setAttribute("y", Y);
-rect.setAttribute("width", Width);
-rect.setAttribute("height", Height);
-rect.setAttribute("rx", 4);
-rect.setAttribute("ry", 4);
-svg.appendChild(rect);
-	Drawarrow(X,Y,Width,Height,0,Direction,);//Strzałka
-	Drawarrow(X,Y,Width,Height,1,Direction);//Strzałka
-	Drawarrow(X,Y,Width,Height,2,Direction);//Strzałka
-	if (colorRGB=="black"){
-    //Drawarrow(X,Y,Width,Height,0,Direction,"white");//Strzałka w prawo
-	//Drawarrow(X,Y,Width,Height,1,Direction,"white");//Strzałka w prawo
-	//Drawarrow(X,Y,Width,Height,2,Direction,"white");//Strzałka w prawo
-	Drawarrow(X,Y,Width,Height,0,(Direction*-1),"white");//Strzałka w lewo
-	Drawarrow(X,Y,Width,Height,1,(Direction*-1),"white");//Strzałka w lewo 
-	Drawarrow(X,Y,Width,Height,2,(Direction*-1),"white");//Strzałka w lewo
-	}
-var txt = document.createElementNS("http://www.w3.org/2000/svg", 'text');
-txt.setAttributeNS(null, 'x', (X+Width/4));
-txt.setAttributeNS(null, 'y', (Y+Height/1.1));
-    txt.setAttribute("fill","black");
-    if (colorRGB=="black"){
-        txt.setAttribute("fill","white");
+    var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    rect.setAttribute("fill",colorRGB);
+    rect.setAttribute("x", X);
+    rect.setAttribute("y", Y);
+    rect.setAttribute("width", Width);
+    rect.setAttribute("height", Height);
+    rect.setAttribute("rx", 4);
+    rect.setAttribute("ry", 4);
+    svg.appendChild(rect);
+        Drawarrow(X,Y,Width,Height,0,Direction);//Strzałka
+        Drawarrow(X,Y,Width,Height,1,Direction);//Strzałka
+        Drawarrow(X,Y,Width,Height,2,Direction);//Strzałka
+        if (colorRGB=="black"){
+        //Drawarrow(X,Y,Width,Height,0,Direction,"white");//Strzałka w prawo
+        //Drawarrow(X,Y,Width,Height,1,Direction,"white");//Strzałka w prawo
+        //Drawarrow(X,Y,Width,Height,2,Direction,"white");//Strzałka w prawo
+        Drawarrow(X,Y,Width,Height,0,(Direction*-1),"white");//Strzałka w lewo
+        Drawarrow(X,Y,Width,Height,1,(Direction*-1),"white");//Strzałka w lewo 
+        Drawarrow(X,Y,Width,Height,2,(Direction*-1),"white");//Strzałka w lewo
+        }
+    var txt = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+    txt.setAttributeNS(null, 'x', (X+Width/4));
+    txt.setAttributeNS(null, 'y', (Y+Height/1.1));
+        txt.setAttribute("fill","black");
+        if (colorRGB=="black"){
+            txt.setAttribute("fill","white");
+        }
+    if (Width<Height*3){
+        txt.setAttributeNS(null,'font-size',Height*0.3);
+    } else {
+        txt.setAttributeNS(null,'font-size',Height*0.7);
     }
-if (Width<Height*3){
-	txt.setAttributeNS(null,'font-size',Height*0.3);
-} else {
-	txt.setAttributeNS(null,'font-size',Height*0.7);
-}
-txt.innerHTML = Text.toString().substr(0,6).replace(".",",");
-svg.appendChild(txt);
-container.appendChild(svg);
+    txt.innerHTML = Text.toString().substr(0,6).replace(".",",");
+    svg.appendChild(txt);
+    svg.setAttribute("height", 290);
+    container.appendChild(svg);
 }
 function Drawarrow (X,Y,Width,Height,i,Direction,color="black") { //Rysowanie strzałki
 var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -299,6 +300,7 @@ function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
 	document.getElementById("container").style.visibility = "visible";       
     document.getElementById("container2").style.visibility = "hidden";
     document.getElementById("RozWymiarow").innerHTML=" Łańcuch wymiarowy:"
+    //document.getElementById("RozWymiarow").style.zIndex="4";
         break;
 	case "MenuAbout":
     document.getElementById("container2").style.visibility = "visible";
@@ -528,11 +530,16 @@ function AcceptBtnChart(id){
 		var DimId=id.substring(8,9);
 		var ChartId=id.substring(10,11)-1;
 		AddImage(DimId,ChartId);
-	}
+	} else {
+        var DimId=id.substring(8,9);
+        var div = document.getElementById('MiniChart'+DimId);
+        div.style.visibility = "hidden";
+    }
 }
 function AddImage(id, chartID){ //MiniChart picture
 	var img = new Image();
 	var div = document.getElementById('MiniChart'+id);
+    div.style.visibility = "visible";
 	var LabelIndex=["r.normalny","r.równomierny", "r.trójkątny","r.Rayleigha", "r.Rayleigha +","r.normalny Asym" ];
 	img.onload = function() {
 		while (div.hasChildNodes()) {
@@ -1306,7 +1313,7 @@ function AddChart(dataY,dataX,label,colorIndex,id) { //Dodawanie wykresu
 				    myChart.data.datasets[0].backgroundColor[i+1] = ColorIndex[2];
                     document.getElementById('minOrgDimDownDIV').innerHTML=minOrgDim;
                     document.getElementById('minOrgDimDownDIV').setAttribute('data-value', i);
-                    document.getElementById('minOrgDimDownDIV').style.left=80 + i*8.15 + "px";
+                    document.getElementById('minOrgDimDownDIV').style.left=80 + i * 8.15 + "px";
                     document.getElementById('minOrgDimDownDIV').style.visibility = "visible";
                 }
             } else if (dataX[i]>OrgDim) { // second half of chart
@@ -1980,22 +1987,18 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 		}
 		if (Sign==-1) DimTemp=DimTemp-(temp*scale); // Wymiary ujemny
 		if (DimTemp<temp2) temp2=DimTemp;
-		Draw(DimTemp,(i*45),temp*scale,40,color,DimIndex[i]+"="+temp,Sign);
+		Draw(DimTemp,(i*30+20),temp*scale,25,color,DimIndex[i]+"="+temp,Sign);
 		if (i==1 && Sign==1) {
-			Drawline(DimTemp+2,(i*45+40),DimTemp+2,(i*45-85),"black",3);
+			Drawline(DimTemp+2,(i*30+45),DimTemp+2,(i*30-15),"black",3);
 			Xstart=DimTemp+2;
 		} else if (i==1 && Sign!=1) {
             Xstart=(DimTemp+2)+temp*scale;
-            Drawline(Xstart,(i*45+40),Xstart,(i*45-85),"black",3);
+            Drawline(Xstart,(i*30+45),Xstart,(i*30-15),"black",3);
         }
 		if (Sign==1) DimTemp=DimTemp+temp*scale*Sign;
 		if (document.getElementById("dim"+DimIndex[i+1]).value.replace(",",".")=="" || i==6){
-			Drawline((DimTemp+2),(i*45+40),(DimTemp+2),(i*45-i*85),"black",3);
-			if (OrgDim<0) {
-			Draw(DimTemp+2,0,(Xstart-DimTemp),30,"black",DimIndex[0]+"="+DimNew,-1);
-			} else {
-			Draw(Xstart,0,(DimTemp-Xstart),30,"black",DimIndex[0]+"="+DimNew,1);
-			}
+			Drawline((DimTemp+2),(i*30+45),(DimTemp+2),(20),"black",3);
+			(OrgDim<0) ? Draw(DimTemp+2,20,(Xstart-DimTemp),25,"black",DimIndex[0]+"="+DimNew,-1) : Draw(Xstart,20,(DimTemp-Xstart),25,"black",DimIndex[0]+"="+DimNew,1);
 		}
 	}
 }    
