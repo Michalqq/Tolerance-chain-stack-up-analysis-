@@ -408,6 +408,9 @@ img {
 			left: 8px;
             outline: none;
 		}
+        .plusMinus {
+            font-size:18px;
+        }
         input[type="file"] {
 			opacity: 0;
 			position: absolute;
@@ -443,7 +446,7 @@ li1 a {
     display: block;
     color: white;
     text-align: center;
-    padding: 5px 12px;
+    padding: 5px 12px 2px;;
     text-decoration: none;
 }
 

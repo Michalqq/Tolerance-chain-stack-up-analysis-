@@ -291,7 +291,7 @@ function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
     if (document.getElementById("Zam_czesciowa").value=="checked"){
         document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:";
     } else {
-        document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów dla wszystkich elementów:";
+        document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów wszystkich elementów:";
     }
 	switch(id) {
     case "MenuGłówna":

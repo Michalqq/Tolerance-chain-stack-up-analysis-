@@ -21,13 +21,14 @@ Kontakt:  kraciukmichal@gmail.com-->
 <meta charset="UTF-8">
 <meta name="author" content="Michał Kraciuk">
 <link rel="stylesheet" href="Mgr.css" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 <title>Analiza i synteza wymiarowa</title>
 
 <ul1 id="Menu0" style="margin-top: -10px; position: fixed">
-  <li1 id="MenuGłówna" class="active" onclick="ActivateMenu(id)" ><a>Główna</a></li1>
-  <li1 id="MenuŁańcuch" class="" onclick="ActivateMenu(id)" ><a>Łańcuch wymiar.</a></li1>
-  <li1 id="MenuAbout" class="" onclick="ActivateMenu(id)" ><a>Opis</a></li1>
+  <li1 id="MenuGłówna" class="active" onclick="ActivateMenu(id)"><a><i class="fas fa-home"></i>    &nbsp  Główna</a></li1>
+  <li1 id="MenuŁańcuch" class="" onclick="ActivateMenu(id)" ><a><i class="fas fa-exchange-alt"></i>&nbsp Łańcuch wymiar.</a></li1>
+  <li1 id="MenuAbout" class="" onclick="ActivateMenu(id)" ><a><i class="far fa-sticky-note"></i>&nbsp Opis</a></li1>
 </ul1>
 
 <img src="image/logowspolne.png" alt="Logo Politechnika Warszawska" style="position: absolute; border-radius: 30px; opacity: 0.85; z-index: 0; margin-left: 585px; margin-top: -3px" width="130" height="65">
@@ -364,11 +365,11 @@ Kontakt:  kraciukmichal@gmail.com-->
 <p id="DevAlert" style="position:absolute; left:345px; top: 206px; color: red; font-size:10px; z-index: 3; padding: 4px; border-radius:8px;"></p>
 <div id="GreyedScreen" style="position: absolute; left: 0px; top: -50px; width: 101%; height:100%; background-color: white; opacity: 0.0; z-index: -2"></div>
 <p id="RozWymiarow" class="rozWymiarStyle"> Wybierz rozkład wymiarów wszystkich elementów:</p>
-<button id="Oblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(0); AcceptRozkladDiv(1)" style="top:250px; padding-bottom: 2px; padding-top: 2px;"><b>Znajdź wymiar Z<br> metodą MinMax</b></button>
-<button id="RozkladOblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(1)" style="top:278px"><b>Rozkład wymiaru zależnego</b></button>
-<button id="ObliczDodatkowy" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:311px; padding-bottom: 2px; padding-top: 2px;"><b>Znajdź wymiar niezależny</b></button>
-<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="Dimensional_synthesis()" style="top:338px; padding-bottom: 2px; padding-top: 2px;"><b>Oblicz odchyłki wym. niezależnych</b></button>
-<button id="Save-btn" class="buttonAllCheck btn sec" onclick="SaveToFile()" style="top:380px"><b>Zapisz wyniki</b></button>
+<button id="Oblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(0); AcceptRozkladDiv(1)" style="top:250px; padding-bottom: 2px; padding-top: 2px;"><b>Wymiar Z metodą<br> MinMax</b></button>
+<button id="RozkladOblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(1)" style="top:278px"><b>   Rozkład wymiaru zależnego</b></button>
+<button id="ObliczDodatkowy" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:312px; padding-bottom: 4px; padding-top: 4px;"><b>Wymiar niezależny</b></button>
+<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="Dimensional_synthesis()" style="top:335px; padding-bottom: 2px; padding-top: 2px;"><b>Odchyłki wym. niezależnych</b></button>
+<button id="Save-btn" class="buttonAllCheck btn sec" onclick="SaveToFile()" style="top:380px; text-align: left; padding-left: 9px"><i class="fas fa-download"></i><b> Zapisz wyniki</b></button>
 <button id="Zam_czesciowa" class="btn sec" onclick="AcceptBtnZamiennosc(id)" style="top:472px; left:150px; visibility:hidden; width:80px"><b>Zamienność częściowa</b></button>
 <div id="ZamiennoscDiv" class="Zamiennosc" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
 	<!--<p id="Zam_wymText"style="margin-left:10px;margin-top:50px;font: 700 13px/1 'Arial', arial">Wymiar początkowy:</p>
@@ -403,9 +404,9 @@ Kontakt:  kraciukmichal@gmail.com-->
 <!--<button class="buttonAllCheck btn sec" style="top:385px;  z-index: 0">-->
 <div class="buttonAllCheck btn sec" style="top:407px; width: 112px; text-align: center;border-radius: 6px; font: 700 9.4px/1 'Open Sans', sans-serif;  box-shadow: inset 0 -1px 0 1px rgba(0, 0, 0, 0.35), inset 0 -10px 20px rgba(0, 0, 0, 0.25);">
 <input type="file" multiple class="form-control btn sec" id="file-input" >
-    <label for="file-upload" class="custom-file-upload" style="cursor:pointer"><b>Załaduj dane z pliku</b></label>
+    <label for="file-upload" class="custom-file-upload" style="cursor:pointer"><i class="fas fa-upload"></i><b> Załaduj dane z pliku</b></label>
 </div>
-<button id="OdNowa" class="buttonAllCheck btn sec" onclick="window.location.href=window.location.href" style="top:430px; background-color:lightgray"><b>Zacznij od nowa, RESET</b>
+<button id="OdNowa" class="buttonAllCheck btn sec" onclick="window.location.href=window.location.href" style="top:432px; background-color:lightgray"><i class="fas fa-sync-alt"></i><b>&nbsp &nbsp Zacznij od nowa, RESET</b>
 </button>
 <div id="ChartFinished" class='chart' style="position:absolute; left:60px; top:510px; height:350px; width:450px;">
     <canvas id="ChartFinal" style="border: solid; border-radius: 10px; visibility: hidden"  ></canvas>
