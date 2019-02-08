@@ -408,9 +408,6 @@ img {
 			left: 8px;
             outline: none;
 		}
-        .plusMinus {
-            font-size:18px;
-        }
         input[type="file"] {
 			opacity: 0;
 			position: absolute;
