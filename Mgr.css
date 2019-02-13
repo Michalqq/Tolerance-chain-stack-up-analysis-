@@ -59,32 +59,47 @@ p4 {
 	width:650px;  
 	height:200px;
 }
-.BtnOblicz {
+.BtnAnalysis {
 	position:absolute;
 	top:235px; 
 	left:5px ; 
 	width:123px; 
-	border:solid; 
-    border-radius: 10px;
-	height:127px;
+	border:solid;
+    border-color:grey;
+    background-color: white;
+    border-radius: 7px;
+	height:97px;
 }
-.BtnDane {
+.BtnSynthesis{
 	position:absolute;
-	top:365px; 
-	left:5px ; 
-	width:123px; 
-	border:solid; 
-    border-radius: 10px;
-	height:59px;
-}
-.BtnOdswiez {
-	position:absolute;
-	top:428px; 
+	top:335px; 
 	left:5px ; 
 	width:123px; 
 	border:solid;
-    border-radius: 10px;
-	height:35px;
+    border-color:red;
+    background-color: white;
+    border-radius: 7px;
+	height:39px;
+}
+.BtnDane {
+	position:absolute;
+	top:377px; 
+	left:5px ; 
+	width:123px; 
+	border:solid gray; 
+    background-color: white;
+    border-radius: 7px;
+	height:57px;
+}
+.BtnOdswiez {
+	position:absolute;
+	top:437px; 
+	left:5px ; 
+	width:123px; 
+	border:solid gray;
+    background-color: white;
+    border-radius: 7px;
+	height:25px;
 }
 .Zamiennosc {
 	z-index:-1;
