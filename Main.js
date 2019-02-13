@@ -400,6 +400,7 @@ function HideShowMaxChart(id) {
 }
 function ChangeSynthAnalys(id) {
     let index = ["BtnAnalysis", "BtnSynthesis"];
+    let DimIndex = ["A", "B", "C", "D", "E", "F"]
     let positionOfIndex = (index.indexOf(document.getElementById(id).className.replace(" deactive","")));
     if (document.getElementById(id).className.search("deactive") != -1) {
         document.getElementById(id).className = index[positionOfIndex];
@@ -410,19 +411,43 @@ function ChangeSynthAnalys(id) {
         document.getElementById(index[positionOfIndex+1]).style.backgroundColor = "";
         zIndexSynthesis(0,["RozkladOblicz", "Oblicz", "ObliczDodatkowy"]);
         zIndexSynthesis(-1,["ObliczSynteza"]);
+        ChangeOpacity(["BtnSchedule"],0.9);
+        zIndexSynthesis(-1,["BtnScheduleHide"]);
+        DisableBox("devUp",DimIndex,"#aaf7aa",false);
+        DisableBox("devDown",DimIndex,"#aaf7aa",false);
+        
     } else {
         document.getElementById(index[positionOfIndex-1]).className = index[positionOfIndex-1] + " deactive";
         document.getElementById(index[positionOfIndex-1]).style.backgroundColor = "";
         zIndexSynthesis(-1,["RozkladOblicz", "Oblicz", "ObliczDodatkowy"]);
         zIndexSynthesis(0,["ObliczSynteza"]);
+        ChangeOpacity(["BtnSchedule"],0.5);
+        zIndexSynthesis(2,["BtnScheduleHide"]);        
+        DisableBox("devUp",DimIndex,"#00a80e",true);
+        DisableBox("devDown",DimIndex,"#00a80e",true);
+        
     }
+}
+function DisableBox (boxName,index,color,disabled){
+    // disabled "true" or "false"
+    //"index" must be array
+    for(i=0; i<index.length; i++) {
+            Box = document.getElementById(boxName + index[i]);
+			Box.disabled=disabled;
+            Box.style="left:"+Box.style.left+"; background-color:" + color;
+    }
+    
+}
+function ChangeOpacity(id, opacity){
+    for (i=0; i<id.length; i++){
+        document.getElementById(id[i]).style.opacity = opacity;
+    } 
 }
 function zIndexSynthesis(zIndex, id){
     for (i=0; i<id.length; i++){
         document.getElementById(id[i]).style.zIndex = zIndex;
     }
 }
-
 function zoomIn(x){
     if (x.className=="chartHist" && x.value=="Chart"){
         x.style.zIndex=5;
@@ -447,16 +472,10 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
 		document.getElementById("ZamiennoscDiv").style.visibility = "hidden";
 		document.getElementById(id).className="btn sec";
         document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów wszystkich elementów:"
-		for(i=0; i<7; i++) {
-			Box = document.getElementById('dim'+DimIndex[i]);
-			Box.disabled=false;
-			Box.style="left:"+Box.style.left+"; background-color: #aaf7aa";
-            Box = document.getElementById('devUp'+DimIndex[i]);
-			Box.disabled=false;
-            Box.style="left:"+Box.style.left+"; background-color: #aaf7aa";
-            Box = document.getElementById('devDown'+DimIndex[i]);
-			Box.disabled=false;
-			Box.style="left:"+Box.style.left+"; background-color: #aaf7aa";
+        DisableBox("dim",DimIndex,"#aaf7aa",false);
+        DisableBox("devUp",DimIndex,"#aaf7aa",false);
+        DisableBox("devDown",DimIndex,"#aaf7aa",false);
+        for(i=0; i<7; i++) {
 			document.getElementById("dim"+DimIndex[i]).style.color='black';
 			document.getElementById("devUp"+DimIndex[i]).style.color='black';
 			document.getElementById("devDown"+DimIndex[i]).style.color='black';
@@ -472,16 +491,10 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
 		}
 		document.getElementById(id).value="1";
 	} else {
+        DisableBox("dim",DimIndex,"#00a80e",true);
+        DisableBox("devUp",DimIndex,"#00a80e",true);
+        DisableBox("devDown",DimIndex,"#00a80e",true);
 		for(i=0; i<7; i++) {
-			Box = document.getElementById('dim'+DimIndex[i]);
-			Box.disabled=true;
-            Box.style="left:"+Box.style.left+"; background-color: #00a80e";
-            Box = document.getElementById('devUp'+DimIndex[i]);
-			Box.disabled=true;
-            Box.style="left:"+Box.style.left+"; background-color: #00a80e";
-            Box = document.getElementById('devDown'+DimIndex[i]);
-			Box.disabled=true;
-			Box.style="left:"+Box.style.left+"; background-color: #00a80e";
             document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:"
             if (document.getElementById("dim"+DimIndex[i]).value!=""){
                 document.getElementById("dim"+DimIndex[i]).style.color='red';
