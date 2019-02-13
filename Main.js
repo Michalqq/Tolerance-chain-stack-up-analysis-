@@ -279,6 +279,14 @@ function SaveToFile(){ //zapis danych do pliku
         
     }
 }
+function ActivateSyntDim(id) {
+    let text=" Color";
+    if (document.getElementById(id).className.indexOf(" Color") != -1 ) text = "";
+    document.getElementById("syntZew" + id.substr(id.length-1,1)).className = "SynthesisTop";
+    document.getElementById("syntWew" + id.substr(id.length-1,1)).className = "SynthesisTop";
+    document.getElementById("syntMP" + id.substr(id.length-1,1)).className = "SynthesisTop";
+    document.getElementById(id).className += text;
+}
 function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
 	var ul = document.getElementById("Menu0");
 	var items = ul.getElementsByTagName("LI1");
@@ -432,11 +440,10 @@ function DisableBox (boxName,index,color,disabled){
     // disabled "true" or "false"
     //"index" must be array
     for(i=0; i<index.length; i++) {
-            Box = document.getElementById(boxName + index[i]);
-			Box.disabled=disabled;
-            Box.style="left:"+Box.style.left+"; background-color:" + color;
+        Box = document.getElementById(boxName + index[i]);
+        Box.disabled=disabled;
+        Box.style="left:"+Box.style.left+"; background-color:" + color;
     }
-    
 }
 function ChangeOpacity(id, opacity){
     for (i=0; i<id.length; i++){
