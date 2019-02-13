@@ -199,10 +199,10 @@ Kontakt:  kraciukmichal@gmail.com-->
 </div>
 
 <!-- zwijać -->
-<div class="BtnAnalysis">
+<div id="BtnAnalysis"  class="BtnAnalysis" onclick="ChangeSynthAnalys(id)">
 	<p style="margin-left:5px;margin-top:1px;font: 600 9px/1 'Arial', arial;color:blue">Analiza łań. wym. - oblicz:</p>
 </div>
-<div class="BtnSynthesis">
+<div id="BtnSynthesis" class="BtnSynthesis deactive" onclick="ChangeSynthAnalys(id)">
 	<p style="margin-left:5px;margin-top:1px;font: 600 9px/1 'Arial', arial;color:blue">Synteza łań. wym. - oblicz:</p>
 </div>
 <div class="BtnDane">
@@ -371,7 +371,7 @@ Kontakt:  kraciukmichal@gmail.com-->
 <button id="Oblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(0); AcceptRozkladDiv(1)" style="top:250px; padding-bottom: 2px; padding-top: 2px;"><b>Wymiar Z metodą<br> MinMax</b></button>
 <button id="RozkladOblicz" class="buttonAllCheck btn sec" onclick="getMaxRange(1)" style="top:278px"><b>   Rozkład wymiaru zależnego</b></button>
 <button id="ObliczDodatkowy" class="buttonAllCheck btn sec" onclick="getMaxRange(2); AcceptRozkladDiv(1)" style="top:312px; padding-bottom: 4px; padding-top: 4px;"><b>Wymiar niezależny</b></button>
-<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="Dimensional_synthesis()" style="top:348px; padding-bottom: 2px; padding-top: 2px;"><b>Odchyłki wym. niezależnych</b></button>
+<button id="ObliczSynteza" class="buttonAllCheck btn sec" onclick="Dimensional_synthesis()" style="top:348px; padding-bottom:2px; padding-top:2px; z-index: -1"><b>Odchyłki wym. niezależnych</b></button>
 <button id="Save-btn" class="buttonAllCheck btn sec" onclick="SaveToFile()" style="top:390px; text-align: left; padding-left: 9px"><i class="fas fa-download"></i><b> Zapisz wyniki</b></button>
 <button id="Zam_czesciowa" class="btn sec" onclick="AcceptBtnZamiennosc(id)" style="top:472px; left:150px; visibility:hidden; width:80px"><b>Zamienność częściowa</b></button>
 <div id="ZamiennoscDiv" class="Zamiennosc" style=" border:solid black; visibility:hidden; position:absolute; display: inline-block">
@@ -405,7 +405,7 @@ Kontakt:  kraciukmichal@gmail.com-->
 <img src="https://png.icons8.com/metro/50/000000/zoom-out.png">
 </button>
 <!--<button class="buttonAllCheck btn sec" style="top:385px;  z-index: 0">-->
-<div class="buttonAllCheck btn sec" style="top:417px; width: 112px; text-align: center;border-radius: 6px; font: 700 9.4px/1 'Open Sans', sans-serif;  box-shadow: inset 0 -1px 0 1px rgba(0, 0, 0, 0.35), inset 0 -10px 20px rgba(0, 0, 0, 0.25);">
+<div class="buttonAllCheck btn sec" style="top:417px; width: 108px; text-align: center;border-radius: 6px; font: 700 9.4px/1 'Open Sans', sans-serif;  box-shadow: inset 0 -1px 0 1px rgba(0, 0, 0, 0.35), inset 0 -10px 20px rgba(0, 0, 0, 0.25);">
 <input type="file" multiple class="form-control btn sec" id="file-input" >
     <label for="file-upload" class="custom-file-upload" style="cursor:pointer"><i class="fas fa-upload"></i><b> Załaduj dane z pliku</b></label>
 </div>

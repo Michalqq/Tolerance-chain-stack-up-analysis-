@@ -398,6 +398,31 @@ function HideShowMaxChart(id) {
 	}
 	
 }
+function ChangeSynthAnalys(id) {
+    let index = ["BtnAnalysis", "BtnSynthesis"];
+    let positionOfIndex = (index.indexOf(document.getElementById(id).className.replace(" deactive","")));
+    if (document.getElementById(id).className.search("deactive") != -1) {
+        document.getElementById(id).className = index[positionOfIndex];
+        document.getElementById(id).style.backgroundColor = "#aeedad";
+    }
+    if (positionOfIndex==0)  {
+        document.getElementById(index[positionOfIndex+1]).className = index[positionOfIndex+1]+ " deactive";
+        document.getElementById(index[positionOfIndex+1]).style.backgroundColor = "";
+        zIndexSynthesis(0,["RozkladOblicz", "Oblicz", "ObliczDodatkowy"]);
+        zIndexSynthesis(-1,["ObliczSynteza"]);
+    } else {
+        document.getElementById(index[positionOfIndex-1]).className = index[positionOfIndex-1] + " deactive";
+        document.getElementById(index[positionOfIndex-1]).style.backgroundColor = "";
+        zIndexSynthesis(-1,["RozkladOblicz", "Oblicz", "ObliczDodatkowy"]);
+        zIndexSynthesis(0,["ObliczSynteza"]);
+    }
+}
+function zIndexSynthesis(zIndex, id){
+    for (i=0; i<id.length; i++){
+        document.getElementById(id[i]).style.zIndex = zIndex;
+    }
+}
+
 function zoomIn(x){
     if (x.className=="chartHist" && x.value=="Chart"){
         x.style.zIndex=5;
