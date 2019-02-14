@@ -654,10 +654,16 @@ function changeDOT(id){
     document.getElementById(id).value=document.getElementById(id).value.replace(".",",");  
     MaxScale=0;
     MaxScaleHistogram=0;
-    if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value!="") {
-        document.getElementById("syntZew" + id.substr(id.length-1,1)).style.opacity = 1;
-        document.getElementById("syntWew" + id.substr(id.length-1,1)).style.opacity = 1;
-        document.getElementById("syntMmP" + id.substr(id.length-1,1)).style.opacity = 1;
+    if (id.substr(id.length-1,1)!="Z"){
+        if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value!="") {
+            document.getElementById("syntZew" + id.substr(id.length-1,1)).style.opacity = 1;
+            document.getElementById("syntWew" + id.substr(id.length-1,1)).style.opacity = 1;
+            document.getElementById("syntMmP" + id.substr(id.length-1,1)).style.opacity = 1;
+        } else if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value=="") {
+            document.getElementById("syntZew" + id.substr(id.length-1,1)).style.opacity = 0.5;
+            document.getElementById("syntWew" + id.substr(id.length-1,1)).style.opacity = 0.5;
+            document.getElementById("syntMmP" + id.substr(id.length-1,1)).style.opacity = 0.5;
+        }
     }
 }
 function validate(evt,id) {
@@ -1616,6 +1622,10 @@ function Dimensional_synthesis() { //Synteza wymiarowa
 	let devDown=document.getElementById("devDownZ").value.replace(",",".");
     let tolerance = parseFloat(devUp) - parseFloat(devDown);
     let index=0;
+    let synthDevUp = "";
+    let synthDevDown = "";
+    let dimType = -1;
+    let typeIndex = ["syntZew", "syntWew", "syntMmP"];
     if (devUp=="" || devUp==null) index=1;
     if (devDown=="" || devDown==null) index=1;
     if (document.getElementById("dimZ").value=="" || document.getElementById("dimZ").value==null) index=1;
@@ -1637,8 +1647,6 @@ function Dimensional_synthesis() { //Synteza wymiarowa
             }
             break;
         }
-        let dimType = -1;
-        let typeIndex = ["syntZew", "syntWew", "syntMmP"];
         for (k=0; k<3; k++){ // Sprawdź jaki typ wymiaru jest zaznaczony do syntezy wymiarowej
             if (document.getElementById(typeIndex[k] + dimIndex[i]).className.indexOf("Color") != -1) {
                 dimType = k;
@@ -1675,18 +1683,41 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         actualDim = document.getElementById("dim" + dimIndex[i]).value;
         if (actualDim == "" || actualDim == null) break;
         value = (factor_k * Math.cbrt(parseFloat(actualDim)))/2;
-        if (i==1) value = value * 2;
+        dimType = -1;
+        for (k=0; k<3; k++){ // Sprawdź jaki typ wymiaru jest zaznaczony do syntezy wymiarowej
+            if (document.getElementById(typeIndex[k] + dimIndex[i]).className.indexOf("Color") != -1) {
+                dimType = k;
+            }
+        }
+        //if (i==1) value = value * 2;
         if (value.toString().length>3) {
             value = value.toFixed(3);
             document.getElementById("devUp" + dimIndex[i]).style.fontSize = "11px";
             document.getElementById("devDown" + dimIndex[i]).style.fontSize = "11px";
         }
-        if (i==1) { //pierwszy wymiar tolerowany wgłąb materiału
-            document.getElementById("devUp" + dimIndex[i]).value = "+0,0";
-            document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
-        } else {
-            document.getElementById("devUp" + dimIndex[i]).value = "+"  + value.toString().replace(".",",");
-            document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+        switch (dimType){
+            case 0:
+                value = value * 2;
+                synthDevDown = "+0,0";
+                synthDevUp = "-" + value.toString().replace(".",",");
+                break;
+            case 1:
+                value = value * 2;
+                synthDevDown = "+" + value.toString().replace(".",",");
+                synthDevUp = "-0,0"; 
+                break;
+            case 2:
+                synthDevDown = "+" + value.toString().replace(".",",");
+                synthDevUp = "-" + value.toString().replace(".",",");
+                break;
+        }
+        alert(synthDevDown + " up=" + synthDevUp);
+        //if (i==1) { //pierwszy wymiar tolerowany wgłąb materiału
+            //document.getElementById("devUp" + dimIndex[i]).value = "+0,0";
+            //document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
+        //} else {
+            document.getElementById("devUp" + dimIndex[i]).value = synthDevUp;
+            document.getElementById("devDown" + dimIndex[i]).value = synthDevDown;
             if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane są wg. równania łańcucha
                 document.getElementById("devUp" + dimIndex[i]).value = "";
                 document.getElementById("devDown" + dimIndex[i]).value = "";
@@ -1697,7 +1728,7 @@ function Dimensional_synthesis() { //Synteza wymiarowa
                 document.getElementById("dim"+temp).style.color='black';
                 document.getElementById("devUp"+temp).style.color='black';
                 document.getElementById("devDown"+temp).style.color='black';
-            }
+            //}
         }
     }
     getMaxRange(3);
