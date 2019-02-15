@@ -502,7 +502,12 @@ img {
 			cursor:pointer;
 	   }
 	   
+.grad1 {
 
+  height: 200px;
+  background-color: red; /* For browsers that do not support gradients */
+  background-image: linear-gradient(to right, red , yellow); /* Standard syntax (must be last) */
+}
 ul1 {
 	z-index:0;
     list-style-type: none;

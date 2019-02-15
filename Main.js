@@ -41,14 +41,35 @@ function HideShowChartHist(){
  
 }
 function Draw(X,Y,Width,Height,colorRGB,Text,Direction) {	//Rysowanie prostokątów do łańcucha wymiarowego + strzałki
+    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    
+    var linearGradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+    linearGradient.setAttribute("id","grad1");
+    linearGradient.setAttribute("x1","0%");
+    linearGradient.setAttribute("y1","0%");
+    linearGradient.setAttribute("x2","70%");
+    linearGradient.setAttribute("y2","0%");
+    
+    var stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop.setAttribute("offset","0%");
+    stop.setAttribute("style","stop-color:rgb(255,0,0);stop-opacity:1");
+    var stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+    stop1.setAttribute("offset","100%");
+    stop1.setAttribute("style","stop-color:rgb(255,255,0);stop-opacity:1");
+    linearGradient.appendChild(stop);
+    linearGradient.appendChild(stop1);
+    defs.appendChild(linearGradient);
+    svg.appendChild(defs);
     var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    rect.setAttribute("fill",colorRGB);
+    //rect.setAttribute("fill",colorRGB);
+    rect.setAttribute("fill","url(#grad1)");
     rect.setAttribute("x", X);
     rect.setAttribute("y", Y);
     rect.setAttribute("width", Width);
     rect.setAttribute("height", Height);
     rect.setAttribute("rx", 4);
     rect.setAttribute("ry", 4);
+    rect.className += "grad1";
     svg.appendChild(rect);
         Drawarrow(X,Y,Width,Height,0,Direction);//Strzałka
         Drawarrow(X,Y,Width,Height,1,Direction);//Strzałka
@@ -654,15 +675,18 @@ function changeDOT(id){
     document.getElementById(id).value=document.getElementById(id).value.replace(".",",");  
     MaxScale=0;
     MaxScaleHistogram=0;
-    if (id.substr(id.length-1,1)!="Z"){
+    tempIndex=["dimA","dimB","dimC","dimD","dimE","dimF",]
+    if (id.substr(id.length-1,1)!="Z"){ // Brak szarości na typach wymiarów dla syntezy
         if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value!="") {
-            document.getElementById("syntZew" + id.substr(id.length-1,1)).style.opacity = 1;
-            document.getElementById("syntWew" + id.substr(id.length-1,1)).style.opacity = 1;
-            document.getElementById("syntMmP" + id.substr(id.length-1,1)).style.opacity = 1;
-        } else if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value=="") {
-            document.getElementById("syntZew" + id.substr(id.length-1,1)).style.opacity = 0.5;
-            document.getElementById("syntWew" + id.substr(id.length-1,1)).style.opacity = 0.5;
-            document.getElementById("syntMmP" + id.substr(id.length-1,1)).style.opacity = 0.5;
+            if (tempIndex.indexOf(id)>0 && document.getElementById(tempIndex[tempIndex.indexOf(id)-1]).value!=""){
+                document.getElementById("syntZew" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 1;
+                document.getElementById("syntWew" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 1;
+                document.getElementById("syntMmP" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 1;
+            }
+        } else if (document.getElementById("BtnSynthesis").className.indexOf(" deactive") == -1 && document.getElementById(id).value=="" && tempIndex.indexOf(id)>0 ) { // Szare typy wymiarów dla syntezy
+            document.getElementById("syntZew" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 0.5;
+            document.getElementById("syntWew" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 0.5;
+            document.getElementById("syntMmP" + tempIndex[tempIndex.indexOf(id)-1].substr(id.length-1,1)).style.opacity = 0.5;
         }
     }
 }
@@ -1918,12 +1942,12 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
         for (i=0; i<rozFinishedTEMP.length; i++){
             zmienneXFinished[k]=parseFloat(((DimNew+DevDownNew)+(zakres*k)).toFixed(6));
             if (parseFloat(rozFinishedTEMP[i]).toFixed(6)<=parseFloat(zmienneXFinished[k])) {
-            temp=temp+1;
+                temp=temp+1;
             } else {
-            rozFinished[k]=parseFloat(temp.toFixed(0));
-            k=k+1;
-            i=i-1;
-            temp=0;
+                rozFinished[k]=parseFloat(temp.toFixed(0));
+                k=k+1;
+                i=i-1;
+                temp=0;
             }
         }
         CalculateSigma(rozFinished,zmienneXFinished);
@@ -1934,7 +1958,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
                 if (rozFinished[k]==0 && temp1==0){ // sprawdzanie od lewej strony jaki zakres tolerancji jest wykorzystany
                  temp2=k+1;
                 } else if (rozFinished[k]!=0 && temp1==0) {
-                 temp1=1;
+                    temp1=1;
                 }
             Finished_Sum=parseFloat(Finished_Sum)+parseFloat(rozFinished[k]);
             }
@@ -2069,13 +2093,13 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
             if (rozFinished[i]>0){
                 document.getElementById("Parag_Min_wykryte").innerHTML ="Wykryty wym. Min: <b>"+zmienneXFinished[i].toFixed(3)+"</b>";
                 i=podzialka+1;
-                }
+            }
         }
         for (i=podzialka;i>0;i--){ //wykryty maksymalny wymiar
             if (rozFinished[i]>0){
                 document.getElementById("Parag_Max_wykryte").innerHTML ="Wykryty wym. Max: <b>"+zmienneXFinished[i].toFixed(3)+"</b>";
                 i=0;
-                }
+            }
         }
         document.getElementById("Zam_toler").innerHTML =document.getElementById("Zam_toler").innerHTML;
     }
