@@ -2026,7 +2026,6 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 	} else { 
         DimIndex=DimIndex[tempIndex];	
 	}
-    alert("dim index =" + DimIndex);
 	if (DimNew==0 && DevUpNew==0 && DevDownNew==0){ // Wymiar i odchyłki =0 NIE WPISUJEMY dodatkowego wymiaru  
 	Param=0;
     document.getElementById("btn+"+DimIndex).value="checked"
