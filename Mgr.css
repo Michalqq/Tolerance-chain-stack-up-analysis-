@@ -136,6 +136,7 @@ p4 {
     height: 15px;
     outline: none;
     z-index: 1;
+    box-shadow: 0px 0px 10px white;
 }
 .SynthesisTop.Color {
     background: #6b6;

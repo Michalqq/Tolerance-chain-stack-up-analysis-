@@ -491,8 +491,8 @@ function ChangeVisible(visibility){
 function DisableBox (boxName,index,color,disabled,value=-1){
     // disabled "true" or "false"
     //"index" must be array
-    for(i=0; i<index.length; i++) {
-        Box = document.getElementById(boxName + index[i]);
+    for(k=0; k<index.length; k++) {
+        Box = document.getElementById(boxName + index[k]);
         if (value != -1){
             Box.value = "";
         }
@@ -583,9 +583,9 @@ function AcceptRozkladDiv(index=0){
         document.getElementById("CompareDiv").style.visibility = "visible";
         document.getElementById("CompareText").style.visibility = "visible";
     } else if (index==1){
-       document.getElementById("RozkladDiv").style.visibility = "hidden"; 
-         document.getElementById("CompareDiv").style.visibility = "hidden";
-         document.getElementById("CompareText").style.visibility = "hidden";
+        document.getElementById("RozkladDiv").style.visibility = "hidden"; 
+        document.getElementById("CompareDiv").style.visibility = "hidden";
+        document.getElementById("CompareText").style.visibility = "hidden";
     }
 }
 function AcceptBtnChart(id){
@@ -1609,8 +1609,7 @@ function tolBiggerCalc(dimIndex) {
         tolBigger = (zakresNew-zakresOld)/zakresOld;
         tolBigger = (tolBigger* 100).toFixed(1);
         document.getElementById("tolBigger" + dimIndex).innerHTML = tolBigger + "%";
-    }
-    
+    } 
 }
 function Dimensional_synthesis() { //Synteza wymiarowa
     let dimIndex=["Z", "A", "B", "C", "D", "E", "F"];
@@ -1698,37 +1697,33 @@ function Dimensional_synthesis() { //Synteza wymiarowa
         switch (dimType){
             case 0:
                 value = value * 2;
-                synthDevDown = "+0,0";
-                synthDevUp = "-" + value.toString().replace(".",",");
+                synthDevUp = "+0,0";
+                synthDevDown = "-" + value.toString().replace(".",",");
                 break;
             case 1:
                 value = value * 2;
-                synthDevDown = "+" + value.toString().replace(".",",");
-                synthDevUp = "-0,0"; 
+                synthDevUp = "+" + value.toString().replace(".",",");
+                synthDevDown = "-0,0"; 
                 break;
             case 2:
-                synthDevDown = "+" + value.toString().replace(".",",");
-                synthDevUp = "-" + value.toString().replace(".",",");
+                synthDevDown = "-" + value.toString().replace(".",",");
+                synthDevUp = "+" + value.toString().replace(".",",");
                 break;
         }
-        alert(synthDevDown + " up=" + synthDevUp);
-        //if (i==1) { //pierwszy wymiar tolerowany wgłąb materiału
-            //document.getElementById("devUp" + dimIndex[i]).value = "+0,0";
-            //document.getElementById("devDown" + dimIndex[i]).value = "-" + value.toString().replace(".",",");
-        //} else {
-            document.getElementById("devUp" + dimIndex[i]).value = synthDevUp;
-            document.getElementById("devDown" + dimIndex[i]).value = synthDevDown;
-            if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane są wg. równania łańcucha
-                document.getElementById("devUp" + dimIndex[i]).value = "";
-                document.getElementById("devDown" + dimIndex[i]).value = "";
-                document.getElementById("dim" + dimIndex[i]).value = "";
-                var temp = dimIndex[i];
-                getMaxRange(2);
-                AcceptRozkladDiv(1);
-                document.getElementById("dim"+temp).style.color='black';
-                document.getElementById("devUp"+temp).style.color='black';
-                document.getElementById("devDown"+temp).style.color='black';
-            //}
+        DisableBox("devUp",dimIndex,"#aaf7aa",false);
+        DisableBox("devDown",dimIndex,"#aaf7aa",false);
+        document.getElementById("devUp" + dimIndex[i]).value = synthDevUp;
+        document.getElementById("devDown" + dimIndex[i]).value = synthDevDown;
+        if (document.getElementById("dim" + dimIndex[i+1]).value == "" || document.getElementById("dim" + dimIndex[i+1]).value ==null) { // ostatnie odchyłki obliczane są wg. równania łańcucha
+            document.getElementById("devUp" + dimIndex[i]).value = "";
+            document.getElementById("devDown" + dimIndex[i]).value = "";
+            document.getElementById("dim" + dimIndex[i]).value = "";
+            var temp = dimIndex[i];
+            getMaxRange(2);
+            AcceptRozkladDiv(1);
+            document.getElementById("dim"+temp).style.color='black';
+            document.getElementById("devUp"+temp).style.color='black';
+            document.getElementById("devDown"+temp).style.color='black';
         }
     }
     getMaxRange(3);
@@ -1802,7 +1797,7 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
                 return;}
         }
 		if (parseFloat(DevUp)<parseFloat(DevDown)){
-			//alert("Odchyłka górna nie może być mniejsza od odchyłki dolnej\nAkcja przerwana");
+			alert("Odchyłka górna nie może być mniejsza od odchyłki dolnej\nAkcja przerwana\nPowiadom admina");
 			return;
 		}
 		if (Dim!=""){
@@ -2031,7 +2026,8 @@ function getMaxRange(Param){ // (param 1,) obliczanie złożenia (Param==2)-Obli
 	} else { 
         DimIndex=DimIndex[tempIndex];	
 	}
-	if (DimNew==0 && DevUpNew==0 && DevDownNew==0){ // Wymiar i odchyłki =0 NIE WPISUJEMY dodatkowego wymiaru
+    alert("dim index =" + DimIndex);
+	if (DimNew==0 && DevUpNew==0 && DevDownNew==0){ // Wymiar i odchyłki =0 NIE WPISUJEMY dodatkowego wymiaru  
 	Param=0;
     document.getElementById("btn+"+DimIndex).value="checked"
 	document.getElementById('btn-'+DimIndex).className="button button3";
