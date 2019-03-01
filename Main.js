@@ -41,35 +41,47 @@ function HideShowChartHist(){
  
 }
 function Draw(X,Y,Width,Height,colorRGB,Text,Direction) {	//Rysowanie prostokątów do łańcucha wymiarowego + strzałki
-    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    
-    var linearGradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
-    linearGradient.setAttribute("id","grad1");
-    linearGradient.setAttribute("x1","0%");
-    linearGradient.setAttribute("y1","0%");
-    linearGradient.setAttribute("x2","70%");
-    linearGradient.setAttribute("y2","0%");
-    
-    var stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop.setAttribute("offset","0%");
-    stop.setAttribute("style","stop-color:rgb(255,0,0);stop-opacity:1");
-    var stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
-    stop1.setAttribute("offset","100%");
-    stop1.setAttribute("style","stop-color:rgb(255,255,0);stop-opacity:1");
-    linearGradient.appendChild(stop);
-    linearGradient.appendChild(stop1);
-    defs.appendChild(linearGradient);
-    svg.appendChild(defs);
+    if (colorRGB != "black" ) {
+            let firstColor = "";
+            let secondColor = "";
+        if  (colorRGB == "#009900") {
+            firstColor = "rgb(0, 205, 0)";
+            secondColor = "rgb(28, 158, 28)";
+        } else {
+            firstColor = "rgb(205,0,0)";
+            secondColor = "rgb(255, 81, 30)";
+        }
+        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+
+        var linearGradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+        linearGradient.setAttribute("id","grad" + colorRGB);
+        linearGradient.setAttribute("x1","0%");
+        linearGradient.setAttribute("y1","0%");
+        linearGradient.setAttribute("x2","70%");
+        linearGradient.setAttribute("y2","0%");
+
+        var stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop.setAttribute("offset","0%");
+        stop.setAttribute("style","stop-color:"+firstColor+";stop-opacity:1");
+        var stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop1.setAttribute("offset","100%");
+        stop1.setAttribute("style","stop-color:"+secondColor+";stop-opacity:1");
+        linearGradient.appendChild(stop);
+        linearGradient.appendChild(stop1);
+        defs.appendChild(linearGradient);
+        svg.appendChild(defs);
+    }
     var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    //rect.setAttribute("fill",colorRGB);
-    rect.setAttribute("fill","url(#grad1)");
+    
+    if (colorRGB == "black" ) rect.setAttribute("fill",colorRGB);
+    else rect.setAttribute("fill","url(#grad" + colorRGB);
     rect.setAttribute("x", X);
     rect.setAttribute("y", Y);
     rect.setAttribute("width", Width);
     rect.setAttribute("height", Height);
     rect.setAttribute("rx", 4);
     rect.setAttribute("ry", 4);
-    rect.className += "grad1";
+    //rect.className += "grad1";
     svg.appendChild(rect);
         Drawarrow(X,Y,Width,Height,0,Direction);//Strzałka
         Drawarrow(X,Y,Width,Height,1,Direction);//Strzałka
