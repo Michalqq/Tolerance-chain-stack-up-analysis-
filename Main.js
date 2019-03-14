@@ -315,6 +315,7 @@ function SaveToFile(){ //zapis danych do pliku
 function SyntDimDescription(id){
     if (document.getElementById("syntDimDescr").className.indexOf(" visible") == -1 && document.getElementById(id).style.opacity!=0.5){
         let text;
+        document.getElementById("syntDimDescr").style.fontSize = "10px";
         switch(id.substr(0,7)) {
             case "syntZew":
                 text = "Wymiar zewnętrzny";
@@ -324,6 +325,7 @@ function SyntDimDescription(id){
                 break;
             case "syntMmP":
                 text = "Wymiar mieszany / pośredni";
+                document.getElementById("syntDimDescr").style.fontSize = "9px";
                 break;
         }
         document.getElementById("syntDimDescr").innerHTML = text;
@@ -351,7 +353,7 @@ function ActivateMenu(id){ // Aktywowanie menu na górze w pasku
 	document.getElementById("container").style.visibility = "hidden";
     document.getElementById("container2").style.visibility = "hidden";
     if (document.getElementById("Zam_czesciowa").value=="checked"){
-        document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:";
+        document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp Przyrost tolerancji:";
     } else {
         document.getElementById("RozWymiarow").innerHTML=" Wybierz rozkład wymiarów wszystkich elementów:";
     }
@@ -590,7 +592,7 @@ function AcceptBtnZamiennosc(id){ // Zamiennosc czesciowa przycisk
         DisableBox("devUp",DimIndex,"#00a80e",true);
         DisableBox("devDown",DimIndex,"#00a80e",true);
 		for(i=0; i<7; i++) {
-            document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp Przyrost tolerancji:"
+            document.getElementById("RozWymiarow").innerHTML="&nbsp &nbsp &nbsp  Przyrost tolerancji:"
             if (document.getElementById("dim"+DimIndex[i]).value!=""){
                 document.getElementById("dim"+DimIndex[i]).style.color='red';
                 document.getElementById("devUp"+DimIndex[i]).style.color='red';
